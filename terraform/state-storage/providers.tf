@@ -1,6 +1,5 @@
 terraform {
   backend "local" {
-    # path = "keybase://private/benniemosher/z/terraform.tfstate"
     path = "/Volumes/Keybase (benniemosher)/private/benniemosher/z/terraform.tfstate"
   }
 

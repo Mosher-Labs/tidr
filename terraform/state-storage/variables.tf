@@ -8,9 +8,6 @@ variable "aws_config" {
 variable "config" {
   description = "The configuration for the state storage backend."
   type = object({
-    encrypt = optional(bool, true)
-    key     = string
-    name    = string
-    region  = optional(string, null)
+    name = string
   })
 }

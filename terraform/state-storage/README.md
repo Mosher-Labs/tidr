@@ -3,9 +3,9 @@
 Unfortunately, there is a large order of operations problem with setting up an
 AWS S3 driven backend for Terraform.
 
-In order to do this, first you must login to your AWS account and add a policy to
-the user you are using to run Terraform (i.e. `z_terraform`). Call that policy
-`mosher_labs_requisite_permissions`, and give it a policy similiar to:
+In order to do this, first you must login to your AWS account and add a customer
+inline policy to the user you are using to run Terraform (i.e. `z_terraform`).
+Call that policy `requisite_permissions`, and give it a policy similiar to:
 
 ```json
 {
@@ -17,9 +17,11 @@ the user you are using to run Terraform (i.e. `z_terraform`). Call that policy
               "iam:AttachUserPolicy",
               "iam:CreatePolicy",
               "iam:DeletePolicy",
+              "iam:DeletePolicyVersion",
               "iam:DetachUserPolicy",
               "iam:Get*",
               "iam:List*",
+              "s3:PutBucketTagging",
               "s3:PutBucketVersioning"
             ],
             "Resource": [
@@ -30,6 +32,6 @@ the user you are using to run Terraform (i.e. `z_terraform`). Call that policy
 }
 ```
 
-This will then get imported into your Terraform via the import block in `iam.tf`.
-
-Then, you can run the following commands to set up the S3 bucket and DynamoDB table:
+Then run `terraform apply` to create all of the IAM policies. At this point you
+can delete the inline policy that you created earlier. Now run `terraform apply`
+again to have it create the AWS S3 bucket required for state storage.

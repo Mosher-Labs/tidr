@@ -18,41 +18,19 @@ resource "aws_iam_policy_attachment" "aws_managed_read_only_access" {
   users = [
     "z_terraform"
   ]
-
-  depends_on = [
-    aws_iam_policy_attachment.requisite_permissions
-  ]
 }
 
-# resource "aws_iam_policy" "state_storage" {
-#   name        = "${var.config.name}_state_storage"
-#   description = "Permissions for the Terraform state storage."
-#   policy      = data.aws_iam_policy_document.state_storage.json
-#
-#   depends_on = [aws_iam_policy_attachment.read_only_access]
-# }
-#
-# resource "aws_iam_policy_attachment" "state_storage" {
-#   name       = "${var.config.name}_state_storage"
-#   policy_arn = aws_iam_policy.state_storage.arn
-#   users = [
-#     "z_terraform"
-#   ]
-# }
+resource "aws_iam_policy" "state_storage" {
+  name        = "${var.config.name}_state_storage"
+  description = "Permissions for Terraform state storage management."
+  policy      = data.aws_iam_policy_document.state_storage.json
+}
 
-# resource "aws_iam_policy" "manage_state_storage" {
-#   name        = "${var.config.name}_manage"
-#   description = "Permissions to manage the Terraform state storage resources."
-#   policy      = data.aws_iam_policy_document.manage_state_storage.json
-#
-#   depends_on = [aws_iam_policy_attachment.read_only_access]
-# }
-#
-# resource "aws_iam_policy_attachment" "manage_state_storage" {
-#   name       = "${var.config.name}_manage"
-#   policy_arn = aws_iam_policy.manage_state_storage.arn
-#   users = [
-#     "z_terraform"
-#   ]
-# }
+resource "aws_iam_policy_attachment" "state_storage" {
+  name       = "${var.config.name}_state_storage"
+  policy_arn = aws_iam_policy.state_storage.arn
+  users = [
+    "z_terraform"
+  ]
+}
 

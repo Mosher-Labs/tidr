@@ -3,6 +3,5 @@ aws_config = {
 }
 
 config = {
-  key  = "z/terraform.tfstate"
   name = "mosher_labs"
 }
