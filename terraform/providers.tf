@@ -18,5 +18,13 @@ terraform {
 
 provider "aws" {
   region = var.aws_config.region
+
+  default_tags {
+    tags = {
+      Name    = local.name
+      Org     = var.config.org_name
+      Project = var.config.project_name
+    }
+  }
 }
 
