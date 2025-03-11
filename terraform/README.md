@@ -24,3 +24,12 @@ To properly apply this, you must follow some steps.
   ```bash
   tf apply
   ```
+
+
+## To get the public IP
+
+```bash
+aws ecs list-tasks --cluster mosher_labs_z --query 'taskArns[0]' --output text --region us-west-2
+aws ecs describe-tasks --cluster mosher_labs_z --tasks <TASK_ARN> --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value' --output text --region us-west-2
+aws ec2 describe-network-interfaces --network-interface-ids <ENI_ID> --query 'NetworkInterfaces[0].Association.PublicIp' --output text --region us-west-2
+```

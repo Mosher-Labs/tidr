@@ -6,19 +6,22 @@ data "aws_iam_policy_document" "terraform_manipulation" {
     actions = [
       "iam:AttachRolePolicy",
       "iam:CreateRole",
+      "iam:CreateServiceLinkedRole",
       "iam:DeleteRole",
       "iam:DetachRolePolicy",
+      "iam:PassRole",
       "iam:TagRole",
     ]
 
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.name}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*",
     ]
   }
 
   statement {
     actions = [
       "iam:TagPolicy",
+      "iam:UpdateAssumeRolePolicy",
     ]
 
     resources = [
@@ -68,6 +71,28 @@ data "aws_iam_policy_document" "terraform_manipulation" {
       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:security-group/*",
       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:subnet/*",
       "arn:aws:ec2:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:vpc/*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "ecs:CreateCluster",
+      "ecs:CreateService",
+      "ecs:DeleteCluster",
+      "ecs:DeleteService",
+      "ecs:DeregisterTaskDefinition",
+      "ecs:ExecuteCommand",
+      "ecs:RegisterTaskDefinition",
+      "ecs:RunTask",
+      "ecs:TagResource",
+      "ecs:UpdateCluster",
+      "ecs:UpdateService",
+    ]
+    resources = [
+      "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster/*",
+      "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:task/*",
+      "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:task-definition/*",
+      "arn:aws:ecs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:service/*",
     ]
   }
 }

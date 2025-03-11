@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   }
 }
 
-data "aws_iam_policy_document" "lambda_dynamodb" {
+data "aws_iam_policy_document" "dynamodb" {
   statement {
     actions = [
       "dynamodb:PutItem",
@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "lambda_execution" {
   }
 }
 
-data "aws_iam_policy_document" "lambda_s3" {
+data "aws_iam_policy_document" "s3" {
   statement {
     actions = [
       "s3:GetObject",
