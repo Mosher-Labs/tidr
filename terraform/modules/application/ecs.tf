@@ -9,17 +9,23 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  cluster                = aws_ecs_cluster.this.id
-  desired_count          = 1
-  enable_execute_command = true
-  launch_type            = "FARGATE"
-  name                   = var.config.name
-  task_definition        = aws_ecs_task_definition.this.arn
+  cluster                 = aws_ecs_cluster.this.id
+  desired_count           = 1
+  enable_ecs_managed_tags = true
+  enable_execute_command  = true
+  launch_type             = "FARGATE"
+  name                    = var.config.name
+  propagate_tags          = "SERVICE"
+  task_definition         = aws_ecs_task_definition.this.arn
 
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.ecs.id]
     subnets          = [aws_subnet.public.id]
+  }
+
+  tags = {
+    Name = var.config.name
   }
 
   depends_on = [
@@ -50,10 +56,16 @@ resource "aws_ecs_task_definition" "this" {
         containerPort = 3000
         hostPort      = 3000
       }]
-      environment = [{
-        name  = "RAILS_ENV"
-        value = "production"
-      }]
+      environment = [
+        {
+          name  = "RAILS_ENV"
+          value = "production"
+        },
+        {
+          name  = "APP_IP_ADDRESS"
+          value = data.aws_network_interface.this.association[0].public_ip
+        }
+      ]
       secrets = [{
         name      = "RAILS_MASTER_KEY"
         valueFrom = "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.config.name}/rails_master_key"
@@ -127,5 +139,3 @@ resource "aws_iam_policy_attachment" "ssm" {
   roles      = [aws_iam_role.ecs_task_execution.name]
   policy_arn = aws_iam_policy.ssm.arn
 }
-
-

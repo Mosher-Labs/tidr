@@ -71,3 +71,14 @@ data "aws_iam_policy_document" "s3" {
   }
 }
 
+data "aws_network_interfaces" "this" {
+  # filter {
+  #   name   = "tag:Name"
+  #   values = [aws_ecs_service.this.name]
+  # }
+}
+
+data "aws_network_interface" "this" {
+  id = data.aws_network_interfaces.this.ids[0]
+}
+
