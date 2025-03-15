@@ -43,12 +43,20 @@ resource "aws_ecs_task_definition" "this" {
     {
       cpu       = 256
       essential = true
-      image     = "nginx:latest"
+      image     = "benniemosher/rails-hello-world:latest"
       memory    = 512
       name      = var.config.name
       portMappings = [{
-        containerPort = 80
-        hostPort      = 80
+        containerPort = 3000
+        hostPort      = 3000
+      }]
+      environment = [{
+        name  = "RAILS_ENV"
+        value = "production"
+      }]
+      secrets = [{
+        name      = "RAILS_MASTER_KEY"
+        valueFrom = "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.config.name}/rails_master_key"
       }]
     }
   ])
@@ -107,4 +115,17 @@ resource "aws_iam_policy_attachment" "dynamodb" {
     aws_iam_role.lambda_execution.name
   ]
 }
+
+resource "aws_iam_policy" "ssm" {
+  name        = "${var.config.name}_ssm"
+  description = "Allow access to retrieve secrets from SSM"
+  policy      = data.aws_iam_policy_document.ssm.json
+}
+
+resource "aws_iam_policy_attachment" "ssm" {
+  name       = "${var.config.name}_ssm"
+  roles      = [aws_iam_role.ecs_task_execution.name]
+  policy_arn = aws_iam_policy.ssm.arn
+}
+
 

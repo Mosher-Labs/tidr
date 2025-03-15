@@ -1,6 +1,33 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
+data "aws_iam_policy_document" "dynamodb" {
+  statement {
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${var.config.name}*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "ssm" {
+  statement {
+    actions = [
+      "ssm:Describe*",
+      "ssm:Get*",
+      "ssm:List*",
+    ]
+
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${var.config.name}*"
+    ]
+  }
+}
+
 data "aws_iam_policy_document" "ecs_task_execution" {
   statement {
     actions = [
@@ -13,19 +40,6 @@ data "aws_iam_policy_document" "ecs_task_execution" {
         "ecs-tasks.amazonaws.com"
       ]
     }
-  }
-}
-
-data "aws_iam_policy_document" "dynamodb" {
-  statement {
-    actions = [
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:DeleteItem"
-    ]
-    resources = [
-      "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${var.config.name}*"
-    ]
   }
 }
 

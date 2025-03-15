@@ -55,10 +55,10 @@ resource "aws_security_group" "ecs" {
 resource "aws_security_group_rule" "ecs_ingress" {
   # cidr_blocks       = [aws_vpc.this.cidr_block]
   cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 80
+  from_port         = 3000
   protocol          = "tcp"
   security_group_id = aws_security_group.ecs.id
-  to_port           = 80
+  to_port           = 3000
   type              = "ingress"
 }
 
