@@ -1,5 +1,8 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
+data "aws_availability_zones" "available" {
+  state = "available"
+}
 
 data "aws_iam_policy_document" "dynamodb" {
   statement {
@@ -69,16 +72,5 @@ data "aws_iam_policy_document" "s3" {
       "arn:aws:s3:::${var.config.name}_recordings/*"
     ]
   }
-}
-
-data "aws_network_interfaces" "this" {
-  # filter {
-  #   name   = "tag:Name"
-  #   values = [aws_ecs_service.this.name]
-  # }
-}
-
-data "aws_network_interface" "this" {
-  id = data.aws_network_interfaces.this.ids[0]
 }
 

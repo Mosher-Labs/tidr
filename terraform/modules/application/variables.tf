@@ -1,6 +1,7 @@
 variable "config" {
   description = "The configuration for the application."
   type = object({
-    name = string
+    name                = string
+    acm_certificate_arn = optional(string, "")
   })
 }

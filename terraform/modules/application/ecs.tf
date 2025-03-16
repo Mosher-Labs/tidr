@@ -21,7 +21,13 @@ resource "aws_ecs_service" "this" {
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.ecs.id]
-    subnets          = [aws_subnet.public.id]
+    subnets          = aws_subnet.public[*].id
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.ecs.arn
+    container_name   = var.config.name
+    container_port   = 3000
   }
 
   tags = {
@@ -63,7 +69,7 @@ resource "aws_ecs_task_definition" "this" {
         },
         {
           name  = "APP_IP_ADDRESS"
-          value = data.aws_network_interface.this.association[0].public_ip
+          value = aws_lb.ecs.dns_name
         }
       ]
       secrets = [{
