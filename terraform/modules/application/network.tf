@@ -126,7 +126,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_listener" "https" {
-  certificate_arn   = var.config.acm_certificate_arn
+  certificate_arn   = data.aws_acm_certificate.this.arn
   load_balancer_arn = aws_lb.ecs.arn
   port              = 443
   protocol          = "HTTPS"

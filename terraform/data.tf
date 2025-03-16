@@ -127,4 +127,15 @@ data "aws_iam_policy_document" "terraform_manipulation" {
       "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.hyphenated_name}/*",
     ]
   }
+
+  statement {
+    actions = [
+      "acm:AddTagsToCertificate",
+      "acm:ImportCertificate",
+    ]
+
+    resources = [
+      "arn:aws:acm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:certificate/*"
+    ]
+  }
 }

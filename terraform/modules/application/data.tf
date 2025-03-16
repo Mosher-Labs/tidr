@@ -4,6 +4,12 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+data "aws_acm_certificate" "this" {
+  tags = {
+    Name = var.config.name
+  }
+}
+
 data "aws_iam_policy_document" "dynamodb" {
   statement {
     actions = [
