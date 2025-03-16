@@ -79,6 +79,7 @@ data "aws_iam_policy_document" "terraform_manipulation" {
       "ecs:CreateCluster",
       "ecs:CreateService",
       "ecs:DeleteCluster",
+      "ecs:DeleteListener",
       "ecs:DeleteService",
       "ecs:DeregisterTaskDefinition",
       "ecs:ExecuteCommand",
@@ -122,12 +123,8 @@ data "aws_iam_policy_document" "terraform_manipulation" {
     ]
 
     resources = [
-      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/${local.name}/*",
-      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/${local.name}/*",
-      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.name}/*",
-      # "arn:aws:elasticloadbalancing:us-west-2:767828733528:targetgroup/mosher-labs-z/b28d471b916b1f3e
-      # "arn:aws:elasticloadbalancing:us-west-2:767828733528:loadbalancer/app/mosher-labs-z/1958398ac53fd579
-      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
+      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/${local.hyphenated_name}/*",
+      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.hyphenated_name}/*",
     ]
   }
 }
