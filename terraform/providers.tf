@@ -11,6 +11,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.89"
     }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5.1"
+    }
   }
 
   required_version = "~> 1.11"
@@ -27,4 +32,6 @@ provider "aws" {
     }
   }
 }
+
+provider "cloudflare" {}
 

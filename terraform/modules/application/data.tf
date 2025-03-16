@@ -5,9 +5,9 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_acm_certificate" "this" {
-  tags = {
-    Name = var.config.name
-  }
+  domain    = "z.benniemosher.dev"
+  key_types = ["EC_prime256v1"]
+  types     = ["IMPORTED"]
 }
 
 data "aws_iam_policy_document" "dynamodb" {

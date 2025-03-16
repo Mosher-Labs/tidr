@@ -125,6 +125,7 @@ data "aws_iam_policy_document" "terraform_manipulation" {
     resources = [
       "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/${local.hyphenated_name}/*",
       "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.hyphenated_name}/*",
+      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:listener/app/${local.hyphenated_name}/*",
     ]
   }
 
@@ -138,4 +139,18 @@ data "aws_iam_policy_document" "terraform_manipulation" {
       "arn:aws:acm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:certificate/*"
     ]
   }
+}
+
+data "cloudflare_account" "this" {
+  filter = {
+    name = "benniemosher-dev"
+  }
+}
+
+data "cloudflare_zones" "this" {
+  account = {
+    id   = data.cloudflare_account.this.account_id
+    name = data.cloudflare_account.this.name
+  }
+  name = "benniemosher.dev"
 }
