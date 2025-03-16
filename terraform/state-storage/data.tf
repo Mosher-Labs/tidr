@@ -11,13 +11,22 @@ data "aws_iam_policy_document" "requisite_permissions" {
       "iam:DetachUserPolicy",
       "iam:Get*",
       "iam:List*",
-      "s3:PutBucketTagging",
-      "s3:PutBucketVersioning",
+      "iam:TagPolicy",
     ]
 
     resources = [
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.config.name}*",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${var.config.name}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/z_terraform",
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:PutBucketTagging",
+      "s3:PutBucketVersioning",
+    ]
+    resources = [
       "arn:aws:s3:::${local.dashed_name}*",
     ]
   }

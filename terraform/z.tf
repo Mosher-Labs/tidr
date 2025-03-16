@@ -10,7 +10,3 @@ module "z" {
     aws_iam_policy_attachment.terraform_manipulation
   ]
 }
-
-output "z" {
-  value = module.z
-}

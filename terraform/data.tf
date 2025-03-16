@@ -109,16 +109,25 @@ data "aws_iam_policy_document" "terraform_manipulation" {
 
   statement {
     actions = [
+      "elasticloadbalancing:AddTags",
+      "elasticloadbalancing:CreateListener",
       "elasticloadbalancing:CreateLoadBalancer",
       "elasticloadbalancing:CreateTargetGroup",
-      "elasticloadbalancing:AddTags",
+      "elasticloadbalancing:DeleteListener",
+      "elasticloadbalancing:DeleteLoadBalancer",
+      "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:ModifyListenerAttributes",
+      "elasticloadbalancing:ModifyLoadBalancerAttributes",
       "elasticloadbalancing:ModifyTargetGroupAttributes",
-      "elasticloadbalancing:DeleteTargetGroup"
     ]
 
     resources = [
-      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/${local.name}*",
-      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.name}*",
+      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/${local.name}/*",
+      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/${local.name}/*",
+      # "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.name}/*",
+      # "arn:aws:elasticloadbalancing:us-west-2:767828733528:targetgroup/mosher-labs-z/b28d471b916b1f3e
+      # "arn:aws:elasticloadbalancing:us-west-2:767828733528:loadbalancer/app/mosher-labs-z/1958398ac53fd579
+      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*",
     ]
   }
 }
