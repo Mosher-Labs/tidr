@@ -69,7 +69,7 @@ resource "aws_ecs_task_definition" "this" {
         },
         {
           name  = "APP_IP_ADDRESS"
-          value = aws_lb.ecs.dns_name
+          value = "z.benniemosher.dev"
         }
       ]
       secrets = [{

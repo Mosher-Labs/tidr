@@ -127,7 +127,7 @@ data "aws_iam_policy_document" "terraform_manipulation" {
 
 data "cloudflare_account" "this" {
   filter = {
-    name = "benniemosher-dev"
+    name = var.cloudflare_config.account_name
   }
 }
 
@@ -136,5 +136,5 @@ data "cloudflare_zones" "this" {
     id   = data.cloudflare_account.this.account_id
     name = data.cloudflare_account.this.name
   }
-  name = "benniemosher.dev"
+  name = replace(var.cloudflare_config.account_name, "-", ".")
 }

@@ -12,3 +12,11 @@ variable "config" {
     project_name = string
   })
 }
+
+variable "cloudflare_config" {
+  description = "The Cloudflare config to deploy resources with."
+  type = object({
+    token        = optional(string, null)
+    account_name = string
+  })
+}
