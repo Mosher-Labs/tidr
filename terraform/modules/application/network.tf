@@ -9,7 +9,7 @@ resource "aws_vpc" "this" {
 resource "aws_subnet" "public" {
   count = 2
 
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  availability_zone       = local.sorted_azs[count.index]
   cidr_block              = "10.0.${count.index + 1}.0/24"
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.this.id
@@ -56,16 +56,6 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-# resource "aws_security_group_rule" "ecs_ingress" {
-#   # cidr_blocks       = [aws_vpc.this.cidr_block]
-#   cidr_blocks       = ["0.0.0.0/0"]
-#   from_port         = 3000
-#   protocol          = "tcp"
-#   security_group_id = aws_security_group.ecs.id
-#   to_port           = 3000
-#   type              = "ingress"
-# }
-
 resource "aws_security_group_rule" "ecs_ingress_http" {
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 80
@@ -99,20 +89,38 @@ resource "aws_lb" "ecs" {
   name               = local.hyphenated_name
   security_groups    = [aws_security_group.ecs.id]
   subnets            = aws_subnet.public[*].id
+
+  tags = {
+    Name = local.hyphenated_name
+  }
 }
 
 resource "aws_lb_target_group" "ecs" {
   name        = local.hyphenated_name
-  port        = 80
+  port        = 3000
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.this.id
+  tags = {
+    Name = local.hyphenated_name
+  }
+  vpc_id = aws_vpc.this.id
+
+  health_check {
+    path                = "/"
+    interval            = 30
+    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
 }
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.ecs.arn
   port              = 80
   protocol          = "HTTP"
+  tags = {
+    Name = "${var.config.name}_http"
+  }
 
   default_action {
     type = "redirect"
@@ -131,6 +139,9 @@ resource "aws_lb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
+  tags = {
+    Name = "${var.config.name}_https"
+  }
 
   default_action {
     target_group_arn = aws_lb_target_group.ecs.arn

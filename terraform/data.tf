@@ -4,38 +4,12 @@ data "aws_region" "current" {}
 data "aws_iam_policy_document" "terraform_manipulation" {
   statement {
     actions = [
-      "iam:AttachRolePolicy",
-      "iam:CreateRole",
-      "iam:CreateServiceLinkedRole",
-      "iam:DeleteRole",
-      "iam:DetachRolePolicy",
-      "iam:PassRole",
-      "iam:TagRole",
+      "acm:AddTagsToCertificate",
+      "acm:ImportCertificate",
     ]
 
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*",
-    ]
-  }
-
-  statement {
-    actions = [
-      "iam:TagPolicy",
-      "iam:UpdateAssumeRolePolicy",
-    ]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${local.name}*",
-    ]
-  }
-
-  statement {
-    actions = [
-      "iam:DetachUserPolicy"
-    ]
-
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/z_terraform",
+      "arn:aws:acm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:certificate/*"
     ]
   }
 
@@ -100,16 +74,6 @@ data "aws_iam_policy_document" "terraform_manipulation" {
 
   statement {
     actions = [
-      "ssm:PutParameter",
-    ]
-
-    resources = [
-      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${local.name}*",
-    ]
-  }
-
-  statement {
-    actions = [
       "elasticloadbalancing:AddTags",
       "elasticloadbalancing:CreateListener",
       "elasticloadbalancing:CreateLoadBalancer",
@@ -123,20 +87,40 @@ data "aws_iam_policy_document" "terraform_manipulation" {
     ]
 
     resources = [
+      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:listener/app/${local.hyphenated_name}/*",
       "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:loadbalancer/app/${local.hyphenated_name}/*",
       "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:targetgroup/${local.hyphenated_name}/*",
-      "arn:aws:elasticloadbalancing:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:listener/app/${local.hyphenated_name}/*",
     ]
   }
 
   statement {
     actions = [
-      "acm:AddTagsToCertificate",
-      "acm:ImportCertificate",
+      "iam:AttachRolePolicy",
+      "iam:CreateRole",
+      "iam:CreateServiceLinkedRole",
+      "iam:DeleteRole",
+      "iam:DetachRolePolicy",
+      "iam:DetachUserPolicy",
+      "iam:PassRole",
+      "iam:TagPolicy",
+      "iam:TagRole",
+      "iam:UpdateAssumeRolePolicy",
     ]
 
     resources = [
-      "arn:aws:acm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:certificate/*"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${local.name}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/z_terraform",
+    ]
+  }
+
+  statement {
+    actions = [
+      "ssm:PutParameter",
+    ]
+
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${local.name}*",
     ]
   }
 }
