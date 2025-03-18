@@ -97,7 +97,7 @@ resource "aws_lb" "ecs" {
 
 resource "aws_lb_target_group" "ecs" {
   name        = local.hyphenated_name
-  port        = 3000
+  port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   tags = {

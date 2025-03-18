@@ -59,13 +59,17 @@ resource "aws_ecs_task_definition" "this" {
       memory    = 512
       name      = var.config.name
       portMappings = [{
-        containerPort = 3000
-        hostPort      = 3000
+        containerPort = 80
+        hostPort      = 80
       }]
       environment = [
         {
           name  = "RAILS_ENV"
           value = "production"
+        },
+        {
+          name  = "PORT"
+          value = "80"
         },
         {
           name  = "APP_IP_ADDRESS"
