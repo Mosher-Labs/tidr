@@ -22,7 +22,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body style="padding-top: 100px;"> <!-- Add padding-top so navbar doesn't overlap content -->
+    <%= render "layouts/navbar" %>
+
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
       <% flash.each do |type, message| %>
         <% alert_type = case type.to_sym
@@ -32,13 +34,24 @@
             else "bg-gray-500"
           end %>
 
-        <div class="<%= alert_type %> text-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 animate-slide-in">
+        <div class="<%= alert_type %> text-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 animate-slide-in" id="flash-message">
           <span><%= message %></span>
-          <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200 focus:outline-none">&times;</button>
         </div>
       <% end %>
     </div>
 
     <%= yield %>
+
+    <%= render "layouts/footer" %>
+
+    <script>
+      setTimeout(() => {
+        const flash = document.getElementById("flash-message");
+        if (flash) {
+          flash.style.opacity = "0";
+          setTimeout(() => flash.remove(), 500);
+        }
+      }, 3000);
+    </script>
   </body>
 </html>
