@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    command: bundle exec rails server -b 0.0.0.0 -p 3000
+    container_name: rails_app
+    depends_on:
+      - db
+      - redis
+    environment:
+      BUNDLE_FROZEN: "false"
+      DATABASE_URL: postgres://postgres:password@db:5432/myapp_development
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/1
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hello_world_app_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
