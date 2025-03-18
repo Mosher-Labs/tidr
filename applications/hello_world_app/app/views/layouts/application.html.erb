@@ -23,8 +23,21 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+      <% flash.each do |type, message| %>
+        <% alert_type = case type.to_sym
+            when :notice then "bg-green-500"
+            when :alert then "bg-red-500"
+            when :error then "bg-red-500"
+            else "bg-gray-500"
+          end %>
+
+        <div class="<%= alert_type %> text-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 animate-slide-in">
+          <span><%= message %></span>
+          <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200 focus:outline-none">&times;</button>
+        </div>
+      <% end %>
+    </div>
 
     <%= yield %>
   </body>
