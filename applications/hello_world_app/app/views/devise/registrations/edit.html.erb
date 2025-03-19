@@ -11,17 +11,26 @@
       <%= f.label :password, "New Password", class: "block font-semibold" %>
       <%= f.password_field :password, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
       <p class="text-sm text-gray-500">Leave blank if you don't want to change it.</p>
+      <% if resource.errors[:password].present? %>
+        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password].first %></p>
+      <% end %>
     </div>
 
     <div class="mb-4">
       <%= f.label :password_confirmation, "Confirm New Password", class: "block font-semibold" %>
       <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
+      <% if resource.errors[:password_confirmation].present? %>
+        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password_confirmation].first %></p>
+      <% end %>
     </div>
 
     <div class="mb-4">
       <%= f.label :current_password, "Current Password", class: "block font-semibold" %>
       <%= f.password_field :current_password, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
       <p class="text-sm text-gray-500">Required to confirm changes.</p>
+      <% if resource.errors[:current_password].present? %>
+        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:current_password].first %></p>
+      <% end %>
     </div>
 
     <div class="text-center">

@@ -6,6 +6,9 @@
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <% if resource.errors[:email].present? %>
+      <p class="text-red-500 text-sm mt-1"><%= resource.errors[:email].first %></p>
+    <% end %>
   </div>
 
   <div class="actions">
