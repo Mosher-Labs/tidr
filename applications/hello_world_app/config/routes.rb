@@ -6,5 +6,8 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
+  get "/zoom/connect", to: "zoom#connect"
+  get "/zoom/callback", to: "zoom#callback"
+
   root "users#index"
 end

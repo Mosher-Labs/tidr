@@ -1,5 +1,11 @@
 # z
 
+## TODO
+
+- Setup Zoom Client ID, Secret, and URL envs
+
+## Setup
+
 To properly apply this, you must follow some steps.
 
 1. Setup state storage:

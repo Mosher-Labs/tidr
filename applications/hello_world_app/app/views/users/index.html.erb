@@ -1,2 +1,11 @@
 <h1 class="text-3xl font-bold text-blue-500">Hi There!!</h1>
 
+<% if current_user.zoom_host_id.present? %>
+  <p>✅ Connected to Zoom as
+    <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
+  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Zoom Connected</button>
+<% else %>
+  <%= link_to "Connect Zoom",
+  zoom_connect_path,
+  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<% end %>
