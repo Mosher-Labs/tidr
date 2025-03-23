@@ -22,19 +22,31 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body style="padding-top: 100px;"> <!-- Add padding-top so navbar doesn't overlap content -->
+  <body class="bg-nord0" style="padding-top: 100px;">
+    <!-- Add padding-top so navbar doesn't overlap content -->
     <%= render "layouts/navbar" %>
 
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
       <% flash.each do |type, message| %>
-        <% alert_type = case type.to_sym
-            when :notice then "bg-green-500"
-            when :alert then "bg-red-500"
-            when :error then "bg-red-500"
-            else "bg-gray-500"
+        <% alert_type =
+          case type.to_sym
+          when :notice
+            "bg-green-500"
+          when :alert
+            "bg-red-500"
+          when :error
+            "bg-red-500"
+          else
+            "bg-gray-500"
           end %>
 
-        <div class="<%= alert_type %> text-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 animate-slide-in" id="flash-message">
+        <div
+          class="
+            <%= alert_type %> text-white px-6 py-3 rounded-lg shadow-md
+            flex items-center justify-between w-96 animate-slide-in
+          "
+          id="flash-message"
+        >
           <span><%= message %></span>
         </div>
       <% end %>
