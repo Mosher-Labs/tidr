@@ -1,20 +1,51 @@
 <h1 class="text-3xl font-bold text-blue-500">Hi There!!</h1>
-<% if current_user.zoom_host_id.present? %>
+
+<% if @zoom_connected %>
   <p>✅ Connected to Zoom as
     <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
   <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Zoom Connected</button>
 <% else %>
+  <p>❌ Not connected to Zoom</p>
   <%= link_to "Connect Zoom",
   zoom_connect_path,
   class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 <% end %>
 
-<% if current_user.calendly_access_token.present? %>
+<% if @calendly_connected %>
   <p>✅ Connected to Calendly as
     <strong><%= current_user.calendly_user_email || "Unknown User" %></strong></p>
   <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Calendly Connected</button>
 <% else %>
+  <p>❌ Not connected to Calendly</p>
   <%= link_to "Connect Calendly",
   auth_calendly_path,
   class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<% end %>
+
+<h1 class="text-3xl font-bold text-blue-500">Upcoming Meetings</h1>
+
+<% if @calendly_connected && @meetings.any? %>
+  <h3>Upcoming Calendly Meetings</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Date & Time</th>
+        <th>Participants</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @meetings.each do |meeting| %>
+        <tr>
+          <td><%= Time.parse(meeting["start_time"]).strftime("%B %d, %Y %I:%M %p") %></td>
+          <td>
+            <% meeting["invitees"]&.each do |invitee| %>
+              <p><%= invitee["email"] %></p>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% elsif @calendly_connected %>
+  <p>No upcoming meetings found.</p>
 <% end %>
