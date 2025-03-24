@@ -48,4 +48,3 @@ module ZoomApi
     JSON.parse(response.body) rescue {}
   end
 end
-

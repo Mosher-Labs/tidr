@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_23_134700) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_24_123715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_134700) do
     t.string "zoom_access_token"
     t.string "zoom_refresh_token"
     t.string "zoom_email"
+    t.string "calendly_access_token"
+    t.string "calendly_refresh_token"
+    t.datetime "calendly_token_expires_at"
+    t.string "calendly_user_uri"
+    t.string "calendly_user_name"
+    t.string "calendly_user_email"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

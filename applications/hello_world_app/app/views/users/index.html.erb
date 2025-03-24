@@ -8,3 +8,13 @@
   zoom_connect_path,
   class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 <% end %>
+
+<% if current_user.calendly_access_token.present? %>
+  <p>✅ Connected to Calendly as
+    <strong><%= current_user.calendly_user_email || "Unknown User" %></strong></p>
+  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Calendly Connected</button>
+<% else %>
+  <%= link_to "Connect Calendly",
+  auth_calendly_path,
+  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<% end %>

@@ -8,6 +8,9 @@ services:
       - cache
     environment:
       BUNDLE_FROZEN: "false"
+      CALENDLY_CLIENT_ID: ${CALENDLY_CLIENT_ID}
+      CALENDLY_CLIENT_SECRET: ${CALENDLY_CLIENT_SECRET}
+      CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
       DATABASE_URL: postgres://postgres:password@db:5432/hello_world_app_${RAILS_ENV:-development}
       PORT: 3000
       RAILS_ENV: development

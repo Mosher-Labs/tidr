@@ -9,5 +9,8 @@ Rails.application.routes.draw do
   get "/zoom/connect", to: "zoom#connect"
   get "/zoom/callback", to: "zoom#callback"
 
+  get "/auth/calendly", to: "calendly#connect"
+  get "/auth/calendly/callback", to: "calendly#callback"
+
   root "users#index"
 end
