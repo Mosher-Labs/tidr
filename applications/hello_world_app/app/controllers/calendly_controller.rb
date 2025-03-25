@@ -28,8 +28,9 @@ class CalendlyController < ApplicationController
       current_user.update(
         calendly_access_token: token_response["access_token"],
         calendly_refresh_token: token_response["refresh_token"],
-        calendly_token_expires_at: Time.current + token_response["expires_in"].to_i.seconds
+        calendly_expires_at: Time.current + token_response["expires_in"].to_i.seconds # Use `calendly_expires_at`
       )
+
       # Fetch and store user info
       calendly_user = fetch_calendly_user(token_response["access_token"])
       if calendly_user

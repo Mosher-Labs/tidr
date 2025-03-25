@@ -3,7 +3,7 @@
 <% if @zoom_connected %>
   <p>✅ Connected to Zoom as
     <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
-  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Zoom Connected</button>
+  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>Zoom Connected</button>
 <% else %>
   <p>❌ Not connected to Zoom</p>
   <%= link_to "Connect Zoom",
@@ -13,39 +13,53 @@
 
 <% if @calendly_connected %>
   <p>✅ Connected to Calendly as
-    <strong><%= current_user.calendly_user_email || "Unknown User" %></strong></p>
-  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded" disabled>Calendly Connected</button>
+    <strong><%= current_user.calendly_user_email || "Unknown User" %></strong>
+  </p>
+  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
+    Calendly Connected
+  </button>
 <% else %>
   <p>❌ Not connected to Calendly</p>
   <%= link_to "Connect Calendly",
-  auth_calendly_path,
-  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    auth_calendly_path,
+    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 <% end %>
 
-<h1 class="text-3xl font-bold text-blue-500">Upcoming Meetings</h1>
-
 <% if @calendly_connected && @meetings.any? %>
-  <h3>Upcoming Calendly Meetings</h3>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Date & Time</th>
-        <th>Participants</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @meetings.each do |meeting| %>
-        <tr>
-          <td><%= Time.parse(meeting["start_time"]).strftime("%B %d, %Y %I:%M %p") %></td>
-          <td>
-            <% meeting["invitees"]&.each do |invitee| %>
-              <p><%= invitee["email"] %></p>
-            <% end %>
-          </td>
+  <div class="p-4 bg-white shadow-lg rounded-xl">
+  <h2 class="text-xl font-bold mb-4">Upcoming Meetings</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse rounded-lg shadow-md">
+      <thead>
+        <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Start Time</th>
+          <th class="py-3 px-6 text-left">End Time</th>
+          <th class="py-3 px-6 text-left">Meeting Name</th>
+          <th class="py-3 px-6 text-left">Participants</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% elsif @calendly_connected %>
+      </thead>
+      <tbody class="text-gray-600 text-sm font-light">
+        <% @meetings.each do |meeting| %>
+          <tr class="border-b border-gray-200 hover:bg-gray-100">
+            <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:start_time] %></td>
+            <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:end_time] %></td>
+            <td class="py-3 px-6"><%= meeting[:name] %></td>
+            <td class="py-3 px-6">
+              <% if meeting[:participants].present? %>
+                <ul class="list-disc list-inside">
+                  <% meeting[:participants].each do |email| %>
+                    <li><a href="mailto:<%= email %>" target="_blank" rel="noopener"><%= email %></a></li>
+                  <% end %>
+                </ul>
+              <% else %>
+                No participants listed
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
   <p>No upcoming meetings found.</p>
 <% end %>

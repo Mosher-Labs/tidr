@@ -8,6 +8,7 @@ module ZoomApi
   ZOOM_TOKEN_URL = "https://zoom.us/oauth/token"
   ZOOM_USER_INFO_URL = "https://api.zoom.us/v2/users/me"
 
+  # TODO: Change variable names to include zoom
   CLIENT_ID = ENV["ZOOM_CLIENT_ID"]
   CLIENT_SECRET = ENV["ZOOM_CLIENT_SECRET"]
   REDIRECT_URI = ENV["ZOOM_REDIRECT_URI"]
