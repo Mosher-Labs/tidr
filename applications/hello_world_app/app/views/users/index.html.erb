@@ -98,6 +98,17 @@
   >
     Calendly Connected
   </button>
+
+  <form method="post" action="<%= calendly_disconnect_path %>">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <button
+      type="submit"
+      class="
+        bg-red-500 rounded hover:bg-red-600 text-white font-bold py-2 px-4 rounded
+        cursor-pointer
+      "
+    >Disconnect Calendly</button>
+  </form>
 <% else %>
   <p>❌ Not connected to Calendly</p>
   <%= link_to "Connect Calendly",

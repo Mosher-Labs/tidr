@@ -22,12 +22,27 @@ class UsersController < ApplicationController
     end
   end
 
+  def disconnect_calendly
+    current_user.update(
+      calendly_access_token: nil,
+      calendly_expires_at: nil,
+      calendly_refresh_token: nil,
+      calendly_token_expires_at: nil,
+      calendly_user_email: nil,
+      calendly_user_name: nil,
+      calendly_user_uri: nil,
+    )
+
+    redirect_to users_path, notice: "Successfully disconnected from Calendly."
+  end
+
   def disconnect_zoom
     current_user.update(
       zoom_access_token: nil,
       zoom_email: nil,
       zoom_host_id: nil,
       zoom_refresh_token: nil,
+      zoom_user_id: nil,
     )
 
     redirect_to users_path, notice: "Successfully disconnected from Zoom."
