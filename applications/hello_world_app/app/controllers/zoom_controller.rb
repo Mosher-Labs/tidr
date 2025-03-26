@@ -31,7 +31,7 @@ class ZoomController < ApplicationController
     # Fetch the user's Zoom ID
     zoom_user_info = ZoomApi.get_user_info(access_token)
     zoom_host_id = zoom_user_info["id"] if zoom_user_info.is_a?(Hash)
-    current_user.update(zoom_host_id: zoom_host_id, zoom_access_token: access_token, zoom_email: zoom_user_info["email"])
+    current_user.update(zoom_host_id: zoom_host_id, zoom_access_token: access_token, zoom_email: zoom_user_info["email"], zoom_user_id: zoom_user_info["id"])
 
     if access_token && zoom_host_id
       current_user.update(zoom_host_id: zoom_host_id, zoom_access_token: access_token, zoom_refresh_token: refresh_token)

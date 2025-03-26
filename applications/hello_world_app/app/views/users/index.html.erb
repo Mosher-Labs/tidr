@@ -3,7 +3,12 @@
 <% if @zoom_connected %>
   <p>✅ Connected to Zoom as
     <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
-  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>Zoom Connected</button>
+  <button
+    class="
+      bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed
+    "
+    disabled
+  >Zoom Connected</button>
 <% else %>
   <p>❌ Not connected to Zoom</p>
   <%= link_to "Connect Zoom",
@@ -11,54 +16,120 @@
   class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 <% end %>
 
+<% if @zoom_connected %>
+  <% if @zoom_recordings.any? %>
+    <div class="p-4 bg-white shadow-lg rounded-xl">
+      <h2 class="text-xl font-bold mb-4">Recorded Meetings</h2>
+
+      <form method="get">
+        <label>From:</label>
+        <input
+          type="date"
+          name="from"
+          id="from_date"
+          value="<%= params[:from].presence || (Time.now.utc - 1.year).strftime('%Y-%m-%d') %>"
+        >
+
+        <label>To:</label>
+        <input
+          type="date"
+          name="to"
+          id="to_date"
+          value="<%= params[:to].presence || Time.now.utc.strftime('%Y-%m-%d') %>"
+        >
+
+        <button
+          type="submit"
+          class="
+            bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+          "
+        >Fetch Recordings</button>
+        <%= link_to "🔄", root_path %>
+      </form>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse rounded-lg shadow-md text-center">
+          <thead>
+            <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+              <th class="py-3 px-6 text-left">Start Time</th>
+              <th class="py-3 px-6 text-left">Meeting Name</th>
+              <th class="py-3 px-6 text-left">Link</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600 text-sm font-light">
+            <% @zoom_recordings.each do |recording| %>
+              <tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6 whitespace-nowrap"><%= recording[:start_time] %></td>
+                <td class="py-3 px-6"><%= recording[:name] %></td>
+                <td class="py-3 px-6">
+                  <a href="<%= recording[:recording_url] %>" target="_blank">View Recording</a>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <p>No Zoom recordings found.</p>
+  <% end %>
+<% else %>
+  <p>You are not connected to Zoom.</p>
+<% end %>
+
 <% if @calendly_connected %>
   <p>✅ Connected to Calendly as
     <strong><%= current_user.calendly_user_email || "Unknown User" %></strong>
   </p>
-  <button class="bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed" disabled>
+  <button
+    class="
+      bg-blue-200 text-white font-bold py-2 px-4 rounded cursor-not-allowed
+    "
+    disabled
+  >
     Calendly Connected
   </button>
 <% else %>
   <p>❌ Not connected to Calendly</p>
   <%= link_to "Connect Calendly",
-    auth_calendly_path,
-    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  auth_calendly_path,
+  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
 <% end %>
 
 <% if @calendly_connected && @meetings.any? %>
   <div class="p-4 bg-white shadow-lg rounded-xl">
-  <h2 class="text-xl font-bold mb-4">Upcoming Meetings</h2>
-  <div class="overflow-x-auto">
-    <table class="w-full border-collapse rounded-lg shadow-md">
-      <thead>
-        <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-          <th class="py-3 px-6 text-left">Start Time</th>
-          <th class="py-3 px-6 text-left">End Time</th>
-          <th class="py-3 px-6 text-left">Meeting Name</th>
-          <th class="py-3 px-6 text-left">Participants</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-600 text-sm font-light">
-        <% @meetings.each do |meeting| %>
-          <tr class="border-b border-gray-200 hover:bg-gray-100">
-            <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:start_time] %></td>
-            <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:end_time] %></td>
-            <td class="py-3 px-6"><%= meeting[:name] %></td>
-            <td class="py-3 px-6">
-              <% if meeting[:participants].present? %>
-                <ul class="list-disc list-inside">
-                  <% meeting[:participants].each do |email| %>
-                    <li><a href="mailto:<%= email %>" target="_blank" rel="noopener"><%= email %></a></li>
-                  <% end %>
-                </ul>
-              <% else %>
-                No participants listed
-              <% end %>
-            </td>
+    <h2 class="text-xl font-bold mb-4">Upcoming Meetings</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse rounded-lg shadow-md text-center">
+        <thead>
+          <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+            <th class="py-3 px-6 text-left">Start Time</th>
+            <th class="py-3 px-6 text-left">End Time</th>
+            <th class="py-3 px-6 text-left">Meeting Name</th>
+            <th class="py-3 px-6 text-left">Participants</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="text-gray-600 text-sm font-light">
+          <% @meetings.each do |meeting| %>
+            <tr class="border-b border-gray-200 hover:bg-gray-100">
+              <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:start_time] %></td>
+              <td class="py-3 px-6 whitespace-nowrap"><%= meeting[:end_time] %></td>
+              <td class="py-3 px-6"><%= meeting[:name] %></td>
+              <td class="py-3 px-6">
+                <% if meeting[:participants].present? %>
+                  <ul class="list-disc list-inside">
+                    <% meeting[:participants].each do |email| %>
+                      <li><a href="mailto:<%= email %>" target="_blank" rel="noopener"><%= email %></a></li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  No participants listed
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 <% else %>
   <p>No upcoming meetings found.</p>
