@@ -21,4 +21,15 @@ class UsersController < ApplicationController
       @meetings = []
     end
   end
+
+  def disconnect_zoom
+    current_user.update(
+      zoom_access_token: nil,
+      zoom_email: nil,
+      zoom_host_id: nil,
+      zoom_refresh_token: nil,
+    )
+
+    redirect_to users_path, notice: "Successfully disconnected from Zoom."
+  end
 end

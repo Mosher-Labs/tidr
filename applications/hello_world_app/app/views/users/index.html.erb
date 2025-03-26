@@ -9,6 +9,16 @@
     "
     disabled
   >Zoom Connected</button>
+  <form method="post" action="<%= zoom_disconnect_path %>">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <button
+      type="submit"
+      class="
+        bg-red-500 rounded hover:bg-red-600 text-white font-bold py-2 px-4 rounded
+        cursor-pointer
+      "
+    >Disconnect Zoom</button>
+  </form>
 <% else %>
   <p>❌ Not connected to Zoom</p>
   <%= link_to "Connect Zoom",
@@ -44,7 +54,7 @@
             bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
           "
         >Fetch Recordings</button>
-        <%= link_to "🔄", root_path %>
+        <%= link_to "🔄", users_path %>
       </form>
       <div class="overflow-x-auto">
         <table class="w-full border-collapse rounded-lg shadow-md text-center">

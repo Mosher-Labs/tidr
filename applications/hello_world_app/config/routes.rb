@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get "/zoom/connect", to: "zoom#connect"
   get "/zoom/callback", to: "zoom#callback"
+  post "/zoom/disconnect", to: "users#disconnect_zoom"
 
   get "/auth/calendly", to: "calendly#connect"
   get "/auth/calendly/callback", to: "calendly#callback"
