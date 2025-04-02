@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-nord: #1b1f2f;
-  --color-nord-black: #424765;
-  --color-nord-black-alternate: rgba(66, 71, 101, 0.75);
-  --color-nord-red: #e67d8f;
-  --color-nord-green: #63b29c;
-  --color-nord-yellow: #d8b072;
-  --color-nord-blue: #83a0ec;
-  --color-nord-magenta: #b59bf0;
-  --color-nord-cyan: #64cae5;
-  --color-nord-white: #c1c9f1;
+  --color-nord: oklch(0.24 0.0312 273.09);
+  --color-nord-black: oklch(0.41 0.0508 276.6);
+  --color-nord-black-alternate: oklch(0.41 0.0508 276.6 / 75%);
+  --color-nord-red: oklch(0.71 0.1303 10.03);
+  --color-nord-red-hover: oklch(0.61 0.1312 10.09);
+  --color-nord-green: oklch(0.71 0.0853 173.71);
+  --color-nord-green-hover: oklch(0.59 0.086 173.62);
+  --color-nord-yellow: oklch(0.78 0.0922 77.72);
+  --color-nord-blue: oklch(0.71 0.1162 267.52);
+  --color-nord-blue-hover: oklch(0.59 0.115 267.29);
+  --color-nord-magenta: oklch(0.74 0.1227 297.41);
+  --color-nord-cyan: oklch(0.79 0.102 217.53);
+  --color-nord-white: oklch(0.84 0.0565 276.24);
 }
 
 body {
-  background-color: var(--color-nord);
+  @apply bg-nord
 }
 
 .flash {
@@ -53,20 +56,24 @@ nav div {
   @apply flex
 }
 
+nav .button-confirm {
+  @apply mr-4
+}
+
 .logo {
   @apply text-xl font-bold text-nord-white
 }
 
-.button {
-  @apply ml-4 px-3 py-2 bg-nord-blue rounded hover:bg-blue-500
+.button, button {
+  @apply ml-4 px-3 py-2 bg-nord-blue rounded hover:bg-nord-blue-hover
 }
 
 .button-confirm {
-  @apply bg-nord-green hover:bg-green-500
+  @apply bg-nord-green hover:bg-nord-green-hover
 }
 
 .button-destruct {
-  @apply bg-nord-red hover:bg-red-500 text-nord-white
+  @apply bg-nord-red hover:bg-nord-red-hover text-nord-white
 }
 
 .session-form {
