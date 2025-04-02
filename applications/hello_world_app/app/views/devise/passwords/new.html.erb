@@ -1,19 +1,19 @@
-<div class="max-w-md mx-auto mt-16 bg-white p-8 rounded-lg shadow-md">
-  <h2 class="text-2xl font-bold text-center mb-4">Forgot Password?</h2>
-  <p class="text-gray-600 text-center mb-6">Enter your email, and we’ll send you instructions to reset your password.</p>
+<div class="session-form">
+  <h2>Forgot Password?</h2>
+  <p>Enter your email, and we’ll send you instructions to reset your password.</p>
 
   <%= form_for(resource, as: resource_name, url: password_path(resource_name)) do |f| %>
-    <div class="mb-4">
-      <%= f.label :email, class: "block font-semibold" %>
-      <%= f.email_field :email, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
+    <div class="form-field">
+      <%= f.label :email %>
+      <%= f.email_field :email %>
       <% if resource.errors[:email].present? %>
-        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:email].first %></p>
+        <p class="input-error"><%= resource.errors[:email].first %></p>
       <% end %>
     </div>
 
-    <div class="text-center">
-      <%= f.submit "Send Reset Instructions", class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" %>
+    <div class="form-field session-actions">
+      <%= f.submit "Send Reset Instructions", class: "button" %>
+      <%= link_to "Cancel", new_session_path(resource_name) %>
     </div>
   <% end %>
 </div>
-

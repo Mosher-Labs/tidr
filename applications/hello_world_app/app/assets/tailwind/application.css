@@ -1,21 +1,210 @@
 @import "tailwindcss";
 
+@theme {
+  --color-nord: #1b1f2f;
+  --color-nord-black: #424765;
+  --color-nord-black-alternate: rgba(66, 71, 101, 0.75);
+  --color-nord-red: #e67d8f;
+  --color-nord-green: #63b29c;
+  --color-nord-yellow: #d8b072;
+  --color-nord-blue: #83a0ec;
+  --color-nord-magenta: #b59bf0;
+  --color-nord-cyan: #64cae5;
+  --color-nord-white: #c1c9f1;
+}
+
 body {
-  background-color: red;
+  background-color: var(--color-nord);
 }
 
-.bg-nord0 {
-  background-color: #2E3440;
+.flash {
+  @apply fixed top-5 left-1/2 transform -translate-x-1/2 z-50
 }
 
-.color-nord0 {
-  color: #2E3440;
+.flash-message {
+  @apply text-nord-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 /*animate-slide-in*/
 }
 
-.btn {
-  @apply font-bold py-2 px-4 rounded
+.flash-message.notice {
+  @apply bg-nord-green
 }
 
-.btn-primary {
-  @apply bg-blue-500 hover:bg-blue-700
+.flash-message.alert {
+  @apply bg-nord-yellow
+}
+
+.flash-message.error {
+  @apply bg-nord-red
+}
+
+.flash-message.info {
+  @apply bg-nord-blue
+}
+
+nav {
+  @apply bg-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
+}
+
+nav a {
+  @apply no-underline text-nord-white hover:text-nord-white
+}
+
+nav div {
+  @apply flex
+}
+
+.logo {
+  @apply text-xl font-bold text-nord-white
+}
+
+.button {
+  @apply ml-4 px-3 py-2 bg-nord-blue rounded hover:bg-blue-500
+}
+
+.button-confirm {
+  @apply bg-nord-green hover:bg-green-500
+}
+
+.button-destruct {
+  @apply bg-nord-red hover:bg-red-500 text-nord-white
+}
+
+.session-form {
+  @apply max-w-md mx-auto mt-16 p-8 rounded-lg shadow-md text-nord-white border-nord-black border
+}
+
+.session-form h2 {
+  @apply text-center
+}
+
+h2 {
+  @apply text-2xl font-bold mb-2 text-nord-white
+}
+
+.form-field {
+  @apply mb-4
+}
+
+.form-field label {
+  @apply block font-semibold
+}
+
+.session-form [type=email], .session-form [type=password] {
+  @apply w-full px-4 py-2 border border-nord-black rounded-lg focus:ring-2 focus:ring-blue-500
+}
+
+.input-error {
+  @apply text-nord-red text-sm mt-1
+}
+
+.session-check {
+  @apply flex items-center
+}
+
+.session-form [type=checkbox] {
+  @apply mr-2
+}
+
+.session-actions {
+  @apply flex justify-between items-center mb-0
+}
+
+.session-form [type=submit] {
+  @apply ml-0 text-nord-white
+}
+
+[type=submit], button, a {
+  @apply cursor-pointer
+}
+
+.session-actions a {
+  @apply text-nord-black
+}
+
+a {
+  @apply underline underline-offset-3 hover:text-nord-white
+}
+
+a.button {
+  @apply no-underline ml-0
+}
+
+.session-form p {
+  @apply text-center mb-6
+}
+
+p {
+  @apply text-nord-white mb-2
+}
+
+h1 {
+  @apply text-3xl font-bold text-nord-white mb-6
+}
+
+main {
+  @apply w-auto max-w-5xl mx-auto
+}
+
+.disconnect {
+  @apply ml-0 text-nord-white
+}
+
+section {
+  @apply my-8
+}
+
+section.zoom form {
+  @apply flex text-nord-white mb-4
+}
+
+section.zoom .form-field {
+  @apply mb-0 mr-2 flex items-center
+}
+
+section.zoom .form-field.actions button {
+  @apply ml-0
+}
+
+section.zoom .refresh {
+  @apply ml-4 no-underline
+}
+
+section .table-container {
+  @apply overflow-x-auto
+}
+
+section table {
+  @apply w-full border-collapse border-nord-white rounded-lg shadow-md text-center
+}
+
+section thead tr {
+  @apply text-nord-white uppercase text-sm leading-normal text-center border-b border-nord-black
+}
+
+section thead th {
+  @apply py-3 px-6 text-center
+}
+
+section tbody {
+  @apply text-nord-white text-sm font-light
+}
+
+section tbody tr {
+  @apply border-b border-nord-black hover:bg-nord-black
+}
+
+section tbody tr:nth-child(even) {
+  @apply bg-nord-black-alternate hover:bg-nord-black
+}
+
+section tbody td {
+  @apply py-3 px-6 whitespace-nowrap
+}
+
+section tbody td ul {
+  @apply list-image-none
+}
+
+footer {
+  @apply text-nord-black text-center py-4 mt-12 fixed bottom-0 w-full z-50
 }

@@ -48,7 +48,9 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN ./bin/rails assets:precompile
+RUN ./bin/rails tailwindcss:build
 
 
 
@@ -66,8 +68,8 @@ RUN groupadd --system --gid 1000 rails && \
   chown -R rails:rails ./
 USER 1000:1000
 
-RUN echo "alias be='bundle exec'" > ~/.bashrc
-RUN echo "ll='ls -lah'" > ~/.bashrc
+RUN echo "alias be='bundle exec'" > ~/.profile
+RUN echo "ll='ls -lah'" > ~/.profile
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/app/bin/docker-entrypoint"]

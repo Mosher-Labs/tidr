@@ -20,6 +20,7 @@ services:
       ZOOM_REDIRECT_URI: ${ZOOM_REDIRECT_URI}
     ports:
       - "${PORT:-3000}:${PORT:-3000}"
+    tty: true
     volumes:
       - .:/app
 

@@ -1,14 +1,16 @@
 <!-- app/views/layouts/_navbar.html.erb -->
-<nav class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50">
-  <a href="/" class="text-xl font-bold">Z</a>
+<nav>
+  <a href="/" class="logo">Z</a>
   <div>
     <% if user_signed_in? %>
-      <a href="<%= edit_user_registration_path %>" class="px-3 py-2 bg-blue-500 rounded hover:bg-blue-600">Profile</a>
-      <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "ml-4 px-3 py-2 bg-red-500 rounded hover:bg-red-600" %>
+      <%= link_to "Profile", edit_user_registration_path, class: "button" %>
+      <%= button_to "Logout",
+      destroy_user_session_path,
+      method: :delete,
+      class: "button button-destruct" %>
     <% else %>
-      <a href="<%= new_user_registration_path %>" class="px-3 py-2 bg-green-500 rounded hover:bg-green-600">Sign Up</a>
-      <a href="<%= new_user_session_path %>" class="ml-4 px-3 py-2 bg-blue-500 rounded hover:bg-blue-600">Login</a>
+      <%= link_to "Sign up", new_user_registration_path, class: "button button-confirm" %>
+      <%= link_to "Login", new_user_session_path, class: "button" %>
     <% end %>
   </div>
 </nav>
-
