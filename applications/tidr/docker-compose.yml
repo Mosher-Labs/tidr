@@ -2,7 +2,6 @@ services:
   app:
     build: .
     command: bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}
-    container_name: hello_world_app
     depends_on:
       - db
       - cache
@@ -11,7 +10,7 @@ services:
       CALENDLY_CLIENT_ID: ${CALENDLY_CLIENT_ID}
       CALENDLY_CLIENT_SECRET: ${CALENDLY_CLIENT_SECRET}
       CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
-      DATABASE_URL: postgres://postgres:password@db:5432/hello_world_app_${RAILS_ENV:-development}
+      DATABASE_URL: postgres://postgres:password@db:5432/tidr_${RAILS_ENV:-development}
       PORT: 3000
       RAILS_ENV: development
       REDIS_URL: redis://cache:6379/1
@@ -22,26 +21,24 @@ services:
       - "${PORT:-3000}:${PORT:-3000}"
     tty: true
     volumes:
-      - .:/app
+      - .:/tidr
 
   db:
     image: postgres:15
-    container_name: hellow_world_app_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: hello_world_app_${RAILS_ENV:-development}
+      POSTGRES_DB: tidr_${RAILS_ENV:-development}
       RAILS_ENV: development
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
   cache:
     image: redis:latest
-    container_name: hello_world_app_cache
     ports:
       - "6379:6379"
 
 volumes:
-  postgres_data:
+  db_data:
