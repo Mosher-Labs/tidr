@@ -4,15 +4,18 @@
   --color-nord: oklch(0.24 0.0312 273.09);
   --color-nord-black: oklch(0.41 0.0508 276.6);
   --color-nord-black-alternate: oklch(0.41 0.0508 276.6 / 75%);
-  --color-nord-red: oklch(0.71 0.1303 10.03);
-  --color-nord-red-hover: oklch(0.61 0.1312 10.09);
-  --color-nord-green: oklch(0.71 0.0853 173.71);
-  --color-nord-green-hover: oklch(0.59 0.086 173.62);
-  --color-nord-yellow: oklch(0.78 0.0922 77.72);
-  --color-nord-blue: oklch(0.71 0.1162 267.52);
-  --color-nord-blue-hover: oklch(0.59 0.115 267.29);
-  --color-nord-magenta: oklch(0.74 0.1227 297.41);
-  --color-nord-cyan: oklch(0.79 0.102 217.53);
+  --color-nord-red: oklch(0.61 0.1206 15.34);
+  --color-nord-red-hover: oklch(0.51 0.1214 15.11);
+  --color-nord-green: oklch(0.77 0.0749 131.06);
+  --color-nord-green-hover: oklch(0.65 0.0741 130.59);
+  --color-nord-yellow: oklch(0.85 0.0892 84.09);
+  --color-nord-yellow-hover: oklch(0.74 0.0893 84.12);
+  --color-nord-blue: oklch(0.59 0.0772 254.03);
+  --color-nord-blue-hover: oklch(0.5 0.077 253.79);
+  --color-nord-magenta: oklch(0.69 0.0625 332.66);
+  --color-nord-magenta-hover: oklch(0.57 0.0635 333.13);
+  --color-nord-cyan: oklch(0.77 0.0622 217.47);
+  --color-nord-cyan-hover: oklch(0.65 0.0626 218.18);
   --color-nord-white: oklch(0.84 0.0565 276.24);
 }
 
@@ -29,11 +32,11 @@ body {
 }
 
 .flash-message.notice {
-  @apply bg-nord-green
+  @apply bg-nord-green text-nord-black
 }
 
 .flash-message.alert {
-  @apply bg-nord-yellow
+  @apply bg-nord-yellow text-nord-black
 }
 
 .flash-message.error {
@@ -45,7 +48,7 @@ body {
 }
 
 nav {
-  @apply bg-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
+  @apply border-b border-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
 }
 
 nav a {
@@ -64,12 +67,16 @@ nav .button-confirm {
   @apply text-xl font-bold text-nord-white
 }
 
+.logo img {
+  @apply h-10
+}
+
 .button, button {
   @apply ml-4 px-3 py-2 bg-nord-blue rounded hover:bg-nord-blue-hover
 }
 
 .button-confirm {
-  @apply bg-nord-green hover:bg-nord-green-hover
+  @apply bg-nord-green hover:bg-nord-green-hover text-nord-black hover:text-nord-black
 }
 
 .button-destruct {

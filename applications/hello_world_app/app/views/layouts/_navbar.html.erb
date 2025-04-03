@@ -1,6 +1,6 @@
 <!-- app/views/layouts/_navbar.html.erb -->
 <nav>
-  <a href="/" class="logo">Z</a>
+  <a href="/" class="logo"><%= image_tag("tidr-full-transparent.png") %></a>
   <div>
     <% if user_signed_in? %>
       <%= link_to "Profile", edit_user_registration_path, class: "button" %>
