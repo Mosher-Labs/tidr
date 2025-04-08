@@ -12,7 +12,7 @@ ARG RUBY_VERSION=3.4.1
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
-WORKDIR /app
+WORKDIR /tidr
 
 # Install base packages including libpq
 RUN apt-get update -qq && \
@@ -24,20 +24,23 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
   BUNDLE_DEPLOYMENT="1" \
   BUNDLE_PATH="/usr/local/bundle" \
-  BUNDLE_WITHOUT="development"
+  BUNDLE_WITHOUT="development" \
+  RAILS_LOG_TO_STDOUT=true \
+  STDOUT_SYNC=true
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
 # Install packages needed to build gems AND PostgreSQL client library
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y build-essential git pkg-config libpq-dev && \
+  apt-get install --no-install-recommends -y build-essential git pkg-config libpq-dev jq && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle config set frozen false
-RUN bundle install && \
+RUN bundle update --bundler && \
+  bundle install && \
   rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
   bundle exec bootsnap precompile --gemfile
 
@@ -60,7 +63,7 @@ FROM base
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /app /app
+COPY --from=build /tidr /tidr
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
@@ -72,7 +75,7 @@ RUN echo "alias be='bundle exec'" > ~/.profile
 RUN echo "ll='ls -lah'" > ~/.profile
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/app/bin/docker-entrypoint"]
+ENTRYPOINT ["/tidr/bin/docker-entrypoint"]
 
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE ${PORT:-3000}

@@ -48,7 +48,7 @@ body {
 }
 
 nav {
-  @apply border-b border-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
+  @apply bg-nord border-b border-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
 }
 
 nav a {
@@ -220,5 +220,5 @@ section tbody td ul {
 }
 
 footer {
-  @apply text-nord-black text-center py-4 mt-12 fixed bottom-0 w-full z-50
+  @apply bg-nord text-nord-black text-center py-4 mt-12 fixed bottom-0 w-full z-50
 }

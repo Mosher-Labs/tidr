@@ -56,7 +56,7 @@
             <tbody>
               <% @zoom_recordings.each do |recording| %>
                 <tr>
-                  <td><%= recording[:start_time] %></td>
+                  <td><%= Time.parse(recording[:start_time]).strftime("%Y-%m-%d %l:%M %P") %></td>
                   <td><%= recording[:name] %></td>
                   <td>
                     <a href="<%= recording[:recording_url] %>" target="_blank">View Recording</a>

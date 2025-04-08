@@ -17,11 +17,14 @@ services:
       ZOOM_CLIENT_ID: ${ZOOM_CLIENT_ID}
       ZOOM_CLIENT_SECRET: ${ZOOM_CLIENT_SECRET}
       ZOOM_REDIRECT_URI: ${ZOOM_REDIRECT_URI}
+      ZOOM_VERIFICATION_TOKEN: ${ZOOM_VERIFICATION_TOKEN}
+      ZOOM_WEBHOOK_SECRET_TOKEN: ${ZOOM_WEBHOOK_SECRET_TOKEN}
     ports:
       - "${PORT:-3000}:${PORT:-3000}"
     tty: true
     volumes:
       - .:/tidr
+    working_dir: /tidr
 
   db:
     image: postgres:15
