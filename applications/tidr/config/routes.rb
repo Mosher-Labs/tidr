@@ -12,5 +12,7 @@ Rails.application.routes.draw do
   get "/auth/calendly/callback", to: "calendly#callback"
   post "/calendly/disconnect", to: "users#disconnect_calendly"
 
+  post "webhooks/zoom" => "webhooks#zoom"
+
   root "users#index"
 end
