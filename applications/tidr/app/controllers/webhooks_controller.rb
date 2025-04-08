@@ -15,7 +15,7 @@ class WebhooksController < ApplicationController
     recording_data = payload.dig("payload", "object")
 
     if event_type == "recording.completed"
-      ProcessZoomRecordingJob.perform_later(recording_data)
+      ProcessZoomRecordingJob.perform_later(recording_data, event_type)
     end
 
     head :ok
