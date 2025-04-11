@@ -19,7 +19,7 @@
       <% if not [edit_user_registration_path].include? request.path %>
         <%= link_to "Settings", edit_user_registration_path, class: "button" %>
       <% end %>
-      <% if not [users_path].include? request.path %>
+      <% if not [users_path, root_path].include? request.path %>
         <%= link_to "Dashboard", users_path, class: "button" %>
       <% end %>
       <%= button_to "Logout",

@@ -22,7 +22,7 @@
 }
 
 body {
-  @apply dark:bg-nord
+  @apply dark:bg-nord dark:scheme-dark
 }
 
 .flash {
@@ -115,7 +115,6 @@ h2 {
 
 [type=date] {
   @apply dark:text-nord-white ml-2
-  /* color-scheme: dark; */
 }
 
 .session-form p.input-description {
