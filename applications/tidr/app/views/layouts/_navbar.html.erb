@@ -1,6 +1,19 @@
 <!-- app/views/layouts/_navbar.html.erb -->
 <nav>
-  <a href="/" class="logo"><%= image_tag("tidr-full-transparent.png") %></a>
+  <a href="/" class="logo">
+    <%= image_tag(
+      "tidr-full-color-transparent.webp",
+      class: "light",
+      width: "110",
+      height: "10",
+    ) %>
+    <%= image_tag(
+      "tidr-full-transparent.webp",
+      class: "dark",
+      width: "110",
+      height: "10",
+    ) %>
+  </a>
   <div>
     <% if user_signed_in? %>
       <%= link_to "Profile", edit_user_registration_path, class: "button" %>

@@ -66,11 +66,15 @@ nav .button-confirm {
 }
 
 .logo {
-  @apply text-xl font-bold text-nord-white
+  @apply text-xl font-bold text-nord-black
 }
 
-.logo img {
-  @apply h-10
+.light {
+  @apply block dark:hidden
+}
+
+.dark {
+  @apply hidden dark:block
 }
 
 .button, button {
@@ -226,5 +230,5 @@ section tbody td ul {
 }
 
 footer {
-  @apply dark:bg-nord border-t border-nord-white dark:border-nord-black text-nord-white dark:text-nord-black text-center py-4 mt-12 w-full z-50
+  @apply dark:bg-nord border-t border-nord-white dark:border-nord-black text-nord-black dark:text-nord-white text-center py-4 mt-12 w-full z-50 text-sm
 }
