@@ -17,10 +17,12 @@
   --color-nord-cyan: oklch(0.77 0.0622 217.47);
   --color-nord-cyan-hover: oklch(0.65 0.0626 218.18);
   --color-nord-white: oklch(0.84 0.0565 276.24);
+  --color-row-alternate: rgba(0,0,0,0.05);
+  --color-row-alternate-hover: rgba(0,0,0,0.15);
 }
 
 body {
-  @apply bg-nord
+  @apply dark:bg-nord
 }
 
 .flash {
@@ -28,7 +30,7 @@ body {
 }
 
 .flash-message {
-  @apply text-nord-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96 /*animate-slide-in*/
+  @apply text-nord-white px-6 py-3 rounded-lg shadow-md flex items-center justify-between w-96
 }
 
 .flash-message.notice {
@@ -48,11 +50,11 @@ body {
 }
 
 nav {
-  @apply bg-nord border-b border-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50
+  @apply bg-white dark:bg-nord border-b border-nord-white dark:border-nord-black text-nord-white px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50 shadow-md
 }
 
 nav a {
-  @apply no-underline text-nord-white hover:text-nord-white
+  @apply no-underline text-white dark:text-nord-white hover:text-white
 }
 
 nav div {
@@ -60,7 +62,7 @@ nav div {
 }
 
 nav .button-confirm {
-  @apply mr-4
+  @apply mr-4 text-white hover:text-white dark:text-nord-white
 }
 
 .logo {
@@ -72,19 +74,19 @@ nav .button-confirm {
 }
 
 .button, button {
-  @apply ml-4 px-3 py-2 bg-nord-blue rounded hover:bg-nord-blue-hover
+  @apply ml-4 px-3 py-2 bg-nord-blue rounded-md hover:bg-nord-blue-hover
 }
 
 .button-confirm {
-  @apply bg-nord-green hover:bg-nord-green-hover text-nord-black hover:text-nord-black
+  @apply bg-nord-green hover:bg-nord-green-hover text-white hover:text-white dark:text-nord-black dark:hover:text-nord-black
 }
 
 .button-destruct {
-  @apply bg-nord-red hover:bg-nord-red-hover text-nord-white
+  @apply bg-nord-red hover:bg-nord-red-hover text-white
 }
 
 .session-form {
-  @apply max-w-md mx-auto mt-16 p-8 rounded-lg shadow-md text-nord-white border-nord-black border
+  @apply max-w-md mx-auto mt-16 p-8 rounded-lg shadow-md text-nord-black dark:text-nord-white border-nord-white dark:border-nord-black border
 }
 
 .session-form h2 {
@@ -92,7 +94,7 @@ nav .button-confirm {
 }
 
 h2 {
-  @apply text-2xl font-bold mb-2 text-nord-white
+  @apply text-2xl font-bold mb-2 text-nord-black dark:text-nord-white
 }
 
 .form-field {
@@ -104,7 +106,11 @@ h2 {
 }
 
 .session-form [type=email], .session-form [type=password] {
-  @apply w-full px-4 py-2 border border-nord-black rounded-lg focus:ring-2 focus:ring-blue-500
+  @apply w-full px-4 py-2 border border-nord-white dark:border-nord-black rounded-lg focus:ring-2 focus:ring-nord-blue
+}
+
+.session-form p.input-description {
+  @apply text-sm mt-1 text-left text-gray-400
 }
 
 .input-error {
@@ -124,7 +130,7 @@ h2 {
 }
 
 .session-form [type=submit] {
-  @apply ml-0 text-nord-white
+  @apply ml-0 text-white dark:text-nord-white
 }
 
 [type=submit], button, a {
@@ -132,7 +138,7 @@ h2 {
 }
 
 .session-actions a {
-  @apply text-nord-black
+  @apply text-nord-white dark:text-nord-black
 }
 
 a {
@@ -148,11 +154,11 @@ a.button {
 }
 
 p {
-  @apply text-nord-white mb-2
+  @apply text-nord-black dark:text-nord-white mb-2
 }
 
 h1 {
-  @apply text-3xl font-bold text-nord-white mb-6
+  @apply text-3xl font-bold text-nord-black dark:text-nord-white mb-6
 }
 
 main {
@@ -160,7 +166,7 @@ main {
 }
 
 .disconnect {
-  @apply ml-0 text-nord-white
+  @apply ml-0 text-white dark:text-nord-white
 }
 
 section {
@@ -168,7 +174,7 @@ section {
 }
 
 section.zoom form {
-  @apply flex text-nord-white mb-4
+  @apply flex text-nord-black mb-4
 }
 
 section.zoom .form-field {
@@ -176,7 +182,7 @@ section.zoom .form-field {
 }
 
 section.zoom .form-field.actions button {
-  @apply ml-0
+  @apply ml-0 text-white
 }
 
 section.zoom .refresh {
@@ -184,15 +190,15 @@ section.zoom .refresh {
 }
 
 section .table-container {
-  @apply overflow-x-auto
+  @apply overflow-x-auto rounded-lg shadow-md text-nord-black dark:text-nord-white border-nord-white dark:border-nord-black border
 }
 
 section table {
-  @apply w-full border-collapse border-nord-white rounded-lg shadow-md text-center
+  @apply w-full mx-auto
 }
 
 section thead tr {
-  @apply text-nord-white uppercase text-sm leading-normal text-center border-b border-nord-black
+  @apply text-nord-black dark:text-nord-white uppercase text-sm leading-normal text-center border-b border-nord-white dark:border-nord-black
 }
 
 section thead th {
@@ -200,15 +206,15 @@ section thead th {
 }
 
 section tbody {
-  @apply text-nord-white text-sm font-light
+  @apply text-nord-black dark:text-nord-white text-sm font-light
 }
 
 section tbody tr {
-  @apply border-b border-nord-black hover:bg-nord-black
+  @apply border-b border-nord-white dark:border-nord-black hover:bg-row-alternate-hover dark:hover:bg-nord-black cursor-pointer
 }
 
 section tbody tr:nth-child(even) {
-  @apply bg-nord-black-alternate hover:bg-nord-black
+  @apply bg-row-alternate dark:bg-nord-black-alternate hover:bg-row-alternate-hover dark:hover:bg-nord-black
 }
 
 section tbody td {
@@ -220,5 +226,5 @@ section tbody td ul {
 }
 
 footer {
-  @apply bg-nord text-nord-black text-center py-4 mt-12 fixed bottom-0 w-full z-50
+  @apply dark:bg-nord border-t border-nord-white dark:border-nord-black text-nord-white dark:text-nord-black text-center py-4 mt-12 w-full z-50
 }

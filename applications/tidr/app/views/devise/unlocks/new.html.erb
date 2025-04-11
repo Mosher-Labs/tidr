@@ -3,16 +3,16 @@
 <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
+  <div class="form-field">
+    <%= f.label :email %><br/>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     <% if resource.errors[:email].present? %>
-      <p class="text-red-500 text-sm mt-1"><%= resource.errors[:email].first %></p>
+      <p class="input-error"><%= resource.errors[:email].first %></p>
     <% end %>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Resend unlock instructions" %>
+  <div class="form-field session-actions">
+    <%= f.submit "Resend unlock instructions", class: "button" %>
   </div>
 <% end %>
 

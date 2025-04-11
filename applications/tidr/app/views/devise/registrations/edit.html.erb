@@ -1,45 +1,50 @@
-<div class="max-w-md mx-auto mt-16 bg-white p-8 rounded-lg shadow-md">
-  <h2 class="text-2xl font-bold text-center mb-4">Edit Your Account</h2>
+<div class="session-form">
+  <h2>Edit Your Account</h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), method: :patch) do |f| %>
-    <div class="mb-4">
-      <%= f.label :email, class: "block font-semibold" %>
-      <%= f.email_field :email, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
+    <div class="form-field">
+      <%= f.label :email %>
+      <%= f.email_field :email %>
+      <% if resource.errors[:email].present? %>
+        <p class="input-error"><%= resource.errors[:email].first %></p>
+      <% end %>
     </div>
 
-    <div class="mb-4">
-      <%= f.label :password, "New Password", class: "block font-semibold" %>
-      <%= f.password_field :password, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
-      <p class="text-sm text-gray-500">Leave blank if you don't want to change it.</p>
+    <div class="form-field">
+      <%= f.label :password, "New Password" %>
+      <%= f.password_field :password %>
+      <p class="input-description">Leave blank if you don't want to change it.</p>
       <% if resource.errors[:password].present? %>
-        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password].first %></p>
+        <p class="input-error"><%= resource.errors[:password].first %></p>
       <% end %>
     </div>
 
-    <div class="mb-4">
-      <%= f.label :password_confirmation, "Confirm New Password", class: "block font-semibold" %>
-      <%= f.password_field :password_confirmation, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
+    <div class="form-field">
+      <%= f.label :password_confirmation, "Confirm New Password" %>
+      <%= f.password_field :password_confirmation %>
       <% if resource.errors[:password_confirmation].present? %>
-        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:password_confirmation].first %></p>
+        <p class="input-error"><%= resource.errors[:password_confirmation].first %></p>
       <% end %>
     </div>
 
-    <div class="mb-4">
-      <%= f.label :current_password, "Current Password", class: "block font-semibold" %>
-      <%= f.password_field :current_password, class: "w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" %>
-      <p class="text-sm text-gray-500">Required to confirm changes.</p>
+    <div class="form-field">
+      <%= f.label :current_password, "Current Password" %>
+      <%= f.password_field :current_password %>
+      <p class="input-description">Required to confirm changes.</p>
       <% if resource.errors[:current_password].present? %>
-        <p class="text-red-500 text-sm mt-1"><%= resource.errors[:current_password].first %></p>
+        <p class="input-error"><%= resource.errors[:current_password].first %></p>
       <% end %>
     </div>
 
-    <div class="text-center">
-      <%= f.submit "Update", class: "bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" %>
+    <div class="form-field session-actions">
+      <%= f.submit "Update", class: "button" %>
+      <%= button_to "Delete My Account",
+      registration_path(resource_name),
+      method: :delete,
+      data: {
+        confirm: "Are you sure?",
+      },
+      class: "button button-destruct" %>
     </div>
   <% end %>
-
-  <div class="text-center mt-4">
-    <%= button_to "Delete My Account", registration_path(resource_name), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" %>
-  </div>
 </div>
-
