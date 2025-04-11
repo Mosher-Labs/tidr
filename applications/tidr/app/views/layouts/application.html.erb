@@ -48,11 +48,15 @@
 
     <script>
       setTimeout(() => {
-        const flash = document.getElementByClassName("flash-message");
-        if (flash) {
+        const flashes = document.getElementsByClassName("flash-message");
+        Array.from(flashes).forEach(flash => {
+          flash.style.transition = "opacity 0.5s ease";
           flash.style.opacity = "0";
-          setTimeout(() => flash.remove(), 500);
-        }
+
+          setTimeout(() => {
+            flash.remove();
+          }, 500);
+        });
       }, 3000);
     </script>
   </body>
