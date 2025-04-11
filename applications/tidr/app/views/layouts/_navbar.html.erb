@@ -16,12 +16,17 @@
   </a>
   <div>
     <% if user_signed_in? %>
-      <%= link_to "Profile", edit_user_registration_path, class: "button" %>
+      <% if not [edit_user_registration_path].include? request.path %>
+        <%= link_to "Settings", edit_user_registration_path, class: "button" %>
+      <% end %>
+      <% if not [users_path].include? request.path %>
+        <%= link_to "Dashboard", users_path, class: "button" %>
+      <% end %>
       <%= button_to "Logout",
       destroy_user_session_path,
       method: :delete,
       class: "button button-destruct" %>
-    <% else %>
+    <% elsif not [new_user_password_path, new_user_session_path, new_user_registration_path].include? request.path %>
       <%= link_to "Sign up", new_user_registration_path, class: "button button-confirm" %>
       <%= link_to "Login", new_user_session_path, class: "button" %>
     <% end %>

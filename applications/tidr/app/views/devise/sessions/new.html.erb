@@ -24,7 +24,8 @@
     </div>
 
     <div class="form-field session-actions">
-      <%= f.submit "Login", class: "button" %>
+      <%= f.submit "Login", class: "button button-confirm" %>
+      <%= link_to "Sign up", new_user_registration_path, class: "button" %>
       <%= link_to "Forgot password?", new_password_path(resource_name) %>
     </div>
   <% end %>

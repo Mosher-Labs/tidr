@@ -62,7 +62,7 @@ nav div {
 }
 
 nav .button-confirm {
-  @apply mr-4 text-white hover:text-white dark:text-nord-white
+  @apply mr-4 text-white hover:text-white
 }
 
 .logo {
@@ -78,7 +78,7 @@ nav .button-confirm {
 }
 
 .button, button {
-  @apply ml-4 px-3 py-2 bg-nord-blue rounded-md hover:bg-nord-blue-hover
+  @apply ml-4 px-3 py-2 bg-nord-blue rounded-md hover:bg-nord-blue-hover text-white
 }
 
 .button-confirm {
@@ -106,15 +106,20 @@ h2 {
 }
 
 .form-field label {
-  @apply block font-semibold
+  @apply block font-semibold dark:text-nord-white
 }
 
 .session-form [type=email], .session-form [type=password] {
   @apply w-full px-4 py-2 border border-nord-white dark:border-nord-black rounded-lg focus:ring-2 focus:ring-nord-blue
 }
 
+[type=date] {
+  @apply dark:text-nord-white ml-2
+  /* color-scheme: dark; */
+}
+
 .session-form p.input-description {
-  @apply text-sm mt-1 text-left text-gray-400
+  @apply text-sm mt-1 text-left text-gray-400 dark:text-nord-black
 }
 
 .input-error {
@@ -134,7 +139,7 @@ h2 {
 }
 
 .session-form [type=submit] {
-  @apply ml-0 text-white dark:text-nord-white
+  @apply ml-0 text-white
 }
 
 [type=submit], button, a {
@@ -142,7 +147,7 @@ h2 {
 }
 
 .session-actions a {
-  @apply text-nord-white dark:text-nord-black
+  @apply dark:text-nord-black
 }
 
 a {
@@ -150,7 +155,7 @@ a {
 }
 
 a.button {
-  @apply no-underline ml-0
+  @apply no-underline ml-0 text-white
 }
 
 .session-form p {
@@ -170,7 +175,7 @@ main {
 }
 
 .disconnect {
-  @apply ml-0 text-white dark:text-nord-white
+  @apply ml-0 text-white
 }
 
 section {
@@ -230,5 +235,5 @@ section tbody td ul {
 }
 
 footer {
-  @apply dark:bg-nord border-t border-nord-white dark:border-nord-black text-nord-black dark:text-nord-white text-center py-4 mt-12 w-full z-50 text-sm
+  @apply dark:bg-nord border-t border-nord-white dark:border-nord-black text-nord-black text-center py-4 mt-12 w-full z-50 text-sm
 }
