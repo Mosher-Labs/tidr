@@ -78,20 +78,59 @@ module ZoomApi
 
   # Fetch recordings for a specific 30-day chunk
   def self.fetch_recordings_chunk(user, from_date, to_date)
-    uri = URI.parse("#{ZOOM_BASE_URL}/users/#{user.zoom_user_id}/recordings?from=#{from_date}&to=#{to_date}")
-    request = Net::HTTP::Get.new(uri)
-    request["Authorization"] = "Bearer #{user.zoom_access_token}"
+    recordings = []
+
+    with_valid_token(user) do |token|
+      uri = URI.parse("#{ZOOM_BASE_URL}/users/#{user.zoom_user_id}/recordings?from=#{from_date}&to=#{to_date}")
+      request = Net::HTTP::Get.new(uri)
+      request["Authorization"] = "Bearer #{token}"
+
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+      data = JSON.parse(response.body) rescue {}
+
+      recordings = (data["meetings"] || []).map do |recording|
+        {
+          name: recording["topic"],
+          start_time: recording["start_time"],
+          recording_url: recording["share_url"]
+        }
+      end
+    end
+
+    recordings
+  end
+
+  def self.with_valid_token(user)
+    if user.zoom_token_expires_at.nil? || Time.current >= user.zoom_token_expires_at
+      Rails.logger.info("🔄 Zoom token expired or missing, refreshing...")
+      refresh_access_token!(user)
+    end
+    yield user.zoom_access_token
+  end
+
+  def self.refresh_access_token!(user)
+    uri = URI.parse(ZOOM_TOKEN_URL)
+    request = Net::HTTP::Post.new(uri)
+    request["Authorization"] = "Basic #{Base64.strict_encode64("#{ZOOM_CLIENT_ID}:#{ZOOM_CLIENT_SECRET}")}"
+    request["Content-Type"] = "application/x-www-form-urlencoded"
+    request.set_form_data({
+      grant_type: "refresh_token",
+      refresh_token: user.zoom_refresh_token
+    })
 
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
-    data = JSON.parse(response.body) rescue {}
+    body = JSON.parse(response.body) rescue {}
 
-    # Extract recordings
-    (data["meetings"] || []).map do |recording|
-      {
-        name: recording["topic"],
-        start_time: recording["start_time"],
-        recording_url: recording["share_url"]
-      }
+    Rails.logger.debug "🔐 Zoom Refresh Token Response: #{body.inspect}"
+
+    if body["access_token"]
+      user.update!(
+        zoom_access_token: body["access_token"],
+        zoom_refresh_token: body["refresh_token"],
+        zoom_token_expires_at: Time.current + body["expires_in"].to_i.seconds
+      )
+    else
+      Rails.logger.error("❌ Failed to refresh Zoom token: #{body}")
     end
   end
 end

@@ -6,7 +6,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # TODO: Add validations for Zoom
+  validates :zoom_access_token, presence: true, if: -> { zoom_refresh_token.present? }
+  validates :zoom_refresh_token, presence: true, if: -> { zoom_access_token.present? }
+  validates :zoom_token_expires_at, presence: true, if: -> { zoom_access_token.present? }
   validates :calendly_access_token, presence: true, if: -> { calendly_refresh_token.present? }
   validates :calendly_refresh_token, presence: true, if: -> { calendly_access_token.present? }
   validates :calendly_expires_at, presence: true, if: -> { calendly_access_token.present? }
