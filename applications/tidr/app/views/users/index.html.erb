@@ -1,6 +1,18 @@
 <main>
   <h1>Hi There!!</h1>
 
+  <h2>Dropbox</h2>
+  <% if @dropbox_connected %>
+    <p>You are connected to Dropbox as
+      <strong><%= current_user.dropbox_email || "Unknown User" %></strong></p>
+    <form method="post" action="<%= dropbox_disconnect_path %>">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <button type="submit" class="button button-dismiss disconnect">Disconnect Dropbox</button>
+    </form>
+  <% else %>
+    <%= link_to "Connect Dropbox", DropboxApi.authorization_url, class: "button" %>
+  <% end %>
+
   <h2>Zoom</h2>
   <% if @zoom_connected %>
     <p>You are connected to Zoom as

@@ -11,6 +11,8 @@ services:
       CALENDLY_CLIENT_SECRET: ${CALENDLY_CLIENT_SECRET}
       CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
       DATABASE_URL: postgres://postgres:password@db:5432/tidr_${RAILS_ENV:-development}
+      DROPBOX_CLIENT_ID: ${DROPBOX_CLIENT_ID}
+      DROPBOX_CLIENT_SECRET: ${DROPBOX_CLIENT_SECRET}
       PORT: 3000
       RAILS_ENV: development
       REDIS_URL: redis://cache:6379/1

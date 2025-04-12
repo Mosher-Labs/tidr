@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   def index
+    @dropbox_connected = current_user.dropbox_access_token.present?
     @zoom_connected = current_user.zoom_access_token.present?
     if @zoom_connected
       from_param = params[:from].is_a?(String) ? params[:from] : nil
@@ -34,6 +35,17 @@ class UsersController < ApplicationController
     )
 
     redirect_to users_path, notice: "Successfully disconnected from Calendly."
+  end
+
+  def disconnect_dropbox
+    current_user.update(
+      dropbox_access_token: nil,
+      dropbox_token_expires_at: nil,
+      dropbox_refresh_token: nil,
+      dropbox_email: nil,
+    )
+
+    redirect_to users_path, notice: "Successfully disconnected from Dropbox."
   end
 
   def disconnect_zoom
