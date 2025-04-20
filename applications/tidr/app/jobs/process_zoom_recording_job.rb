@@ -1,3 +1,6 @@
+require "open-uri"
+require "httparty"
+
 class ProcessZoomRecordingJob < ApplicationJob
   queue_as :default
 
@@ -16,17 +19,42 @@ class ProcessZoomRecordingJob < ApplicationJob
     rec.status = "processing"
     rec.save!
 
-    # file = download_file(rec.download_url, user.zoom_access_token)
-    # url = upload_to_s3(file, filename: "zoom-#{rec.recording_id}.mp4")
+    filename = "/zoom-#{recording_data["id"]}.mp4"
 
-    # Stream from Zoom and upload directly to S3
-    open(zoom_download_url, "rb") do |file_stream|
-      s3_client.put_object(bucket: "s3-bucket", key: "zoom-#{rec.recording_id}.mp4", body: file_stream)
+    # Stream download from Zoom and upload to Dropbox
+    open(recording_data["download_url"], "rb",
+         "Authorization" => "Bearer #{user.zoom_access_token}") do |file_stream|
+      dropbox_upload(file_stream, filename, user.dropbox_access_token)
     end
 
-    rec.update!(status: "uploaded", s3_url: url)
+    rec.update!(status: "uploaded", dropbox_path: filename)
   rescue => e
     rec.update(status: "failed") if rec&.persisted?
     raise e
+  end
+
+  private
+
+  def dropbox_upload(file_stream, dropbox_path, access_token)
+    url = "https://content.dropboxapi.com/2/files/upload"
+
+    response = HTTParty.post(url,
+      headers: {
+        "Authorization" => "Bearer #{access_token}",
+        "Dropbox-API-Arg" => {
+          path: dropbox_path,
+          mode: "add",
+          autorename: true,
+          mute: false
+        }.to_json,
+        "Content-Type" => "application/octet-stream"
+      },
+      body: file_stream.read
+    )
+
+    unless response.success?
+      Rails.logger.error "❌ Dropbox upload failed: #{response.code} - #{response.body}"
+      raise "Dropbox upload failed"
+    end
   end
 end

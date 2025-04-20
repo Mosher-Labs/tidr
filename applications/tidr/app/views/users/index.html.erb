@@ -1,77 +1,137 @@
 <main>
   <h1>Hi There!!</h1>
 
-  <h2>Dropbox</h2>
-  <% if @dropbox_connected %>
-    <p>You are connected to Dropbox as
-      <strong><%= current_user.dropbox_email || "Unknown User" %></strong></p>
-    <form method="post" action="<%= dropbox_disconnect_path %>">
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-      <button type="submit" class="button button-dismiss disconnect">Disconnect Dropbox</button>
-    </form>
-  <% else %>
-    <%= link_to "Connect Dropbox", DropboxApi.authorization_url, class: "button" %>
-  <% end %>
+  <section class="dropbox">
+    <h2>Dropbox</h2>
+    <% if @dropbox_connected %>
+      <p>You are connected to Dropbox as
+        <strong><%= current_user.dropbox_email || "Unknown User" %></strong></p>
+      <form method="post" action="<%= dropbox_disconnect_path %>">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <button type="submit" class="button button-dismiss disconnect">Disconnect Dropbox</button>
+      </form>
+    <% else %>
+      <%= link_to "Connect Dropbox", DropboxApi.authorization_url, class: "button" %>
+    <% end %>
+  </section>
 
-  <h2>Zoom</h2>
-  <% if @zoom_connected %>
-    <p>You are connected to Zoom as
-      <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
-    <form method="post" action="<%= zoom_disconnect_path %>">
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-      <button type="submit" class="button button-dismiss disconnect">Disconnect Zoom</button>
-    </form>
-  <% else %>
-    <p><%= link_to "Connect Zoom", zoom_connect_path, class: "button" %></p>
-  <% end %>
+  <section class="zoom">
+    <h2>Zoom</h2>
+    <% if @zoom_connected %>
+      <p>You are connected to Zoom as
+        <strong><%= current_user.zoom_email || "Unknown User" %></strong></p>
+      <form method="post" action="<%= zoom_disconnect_path %>">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <button type="submit" class="button button-dismiss disconnect">Disconnect Zoom</button>
+      </form>
+    <% else %>
+      <p><%= link_to "Connect Zoom", zoom_connect_path, class: "button" %></p>
+    <% end %>
 
-  <% if @zoom_connected %>
-    <% if @zoom_recordings.any? %>
-      <section class="zoom">
-        <h2>Recorded Meetings</h2>
+    <% if @zoom_connected %>
+      <% if @zoom_recordings.any? %>
+        <section class="zoom">
+          <h2>Recorded Meetings</h2>
 
-        <form method="get">
-          <div class="form-field">
-            <label>From:</label>
-            <input
-              type="date"
-              name="from"
-              id="from_date"
-              value="<%= params[:from].presence || (Time.now.utc - 1.year).strftime('%Y-%m-%d') %>"
-            >
+          <form method="get">
+            <div class="form-field">
+              <label>From:</label>
+              <input
+                type="date"
+                name="from"
+                id="from_date"
+                value="<%= params[:from].presence || (Time.now.utc - 1.year).strftime('%Y-%m-%d') %>"
+              >
+            </div>
+
+            <div class="form-field">
+              <label>To:</label>
+              <input
+                type="date"
+                name="to"
+                id="to_date"
+                value="<%= params[:to].presence || Time.now.utc.strftime('%Y-%m-%d') %>"
+              >
+            </div>
+
+            <div class="form-field actions">
+              <button type="submit" class="button">Fetch Recordings</button>
+              <%= link_to "🔄", users_path, class: "refresh" %>
+            </div>
+          </form>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Start Time</th>
+                  <th>Meeting Name</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @zoom_recordings.each do |recording| %>
+                  <tr>
+                    <td><%= Time.parse(recording[:start_time]).strftime("%Y-%m-%d %l:%M %P") %></td>
+                    <td><%= recording[:name] %></td>
+                    <td>
+                      <a href="<%= recording[:recording_url] %>" target="_blank">View Recording</a>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
+        </section>
+      <% else %>
+        <p>No Zoom recordings found.</p>
+      <% end %>
+    <% end %>
+  </section>
 
-          <div class="form-field">
-            <label>To:</label>
-            <input
-              type="date"
-              name="to"
-              id="to_date"
-              value="<%= params[:to].presence || Time.now.utc.strftime('%Y-%m-%d') %>"
-            >
-          </div>
+  <section class="calendly">
+    <h2>Calendly</h2>
 
-          <div class="form-field actions">
-            <button type="submit" class="button">Fetch Recordings</button>
-            <%= link_to "🔄", users_path, class: "refresh" %>
-          </div>
-        </form>
+    <% if @calendly_connected %>
+      <p>You are connected to Calendly as
+        <strong><%= current_user.calendly_user_email || "Unknown User" %></strong></p>
+      <form method="post" action="<%= calendly_disconnect_path %>">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <button type="submit" class="button button-dismiss disconnect">Disconnect Calendly</button>
+      </form>
+    <% else %>
+      <p><%= link_to "Connect Calendly", auth_calendly_path, class: "button" %></p>
+    <% end %>
+
+    <% if @calendly_connected && @meetings.any? %>
+      <section class="calendly">
+        <h2>Upcoming Meetings</h2>
+
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>Start Time</th>
+                <th>End Time</th>
                 <th>Meeting Name</th>
-                <th>Link</th>
+                <th>Participants</th>
               </tr>
             </thead>
             <tbody>
-              <% @zoom_recordings.each do |recording| %>
+              <% @meetings.each do |meeting| %>
                 <tr>
-                  <td><%= Time.parse(recording[:start_time]).strftime("%Y-%m-%d %l:%M %P") %></td>
-                  <td><%= recording[:name] %></td>
+                  <td><%= meeting[:start_time] %></td>
+                  <td><%= meeting[:end_time] %></td>
+                  <td><%= meeting[:name] %></td>
                   <td>
-                    <a href="<%= recording[:recording_url] %>" target="_blank">View Recording</a>
+                    <% if meeting[:participants].present? %>
+                      <ul>
+                        <% meeting[:participants].each do |email| %>
+                          <li><a href="mailto:<%= email %>" target="_blank" rel="noopener"><%= email %></a></li>
+                        <% end %>
+                      </ul>
+                    <% else %>
+                      No participants listed
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -79,60 +139,6 @@
           </table>
         </div>
       </section>
-    <% else %>
-      <p>No Zoom recordings found.</p>
     <% end %>
-  <% end %>
-
-  <h2>Calendly</h2>
-
-  <% if @calendly_connected %>
-    <p>You are connected to Calendly as
-      <strong><%= current_user.calendly_user_email || "Unknown User" %></strong></p>
-    <form method="post" action="<%= calendly_disconnect_path %>">
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-      <button type="submit" class="button button-dismiss disconnect">Disconnect Calendly</button>
-    </form>
-  <% else %>
-    <p><%= link_to "Connect Calendly", auth_calendly_path, class: "button" %></p>
-  <% end %>
-
-  <% if @calendly_connected && @meetings.any? %>
-    <section class="calendly">
-      <h2>Upcoming Meetings</h2>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Meeting Name</th>
-              <th>Participants</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @meetings.each do |meeting| %>
-              <tr>
-                <td><%= meeting[:start_time] %></td>
-                <td><%= meeting[:end_time] %></td>
-                <td><%= meeting[:name] %></td>
-                <td>
-                  <% if meeting[:participants].present? %>
-                    <ul>
-                      <% meeting[:participants].each do |email| %>
-                        <li><a href="mailto:<%= email %>" target="_blank" rel="noopener"><%= email %></a></li>
-                      <% end %>
-                    </ul>
-                  <% else %>
-                    No participants listed
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  <% end %>
+  </section>
 </main>

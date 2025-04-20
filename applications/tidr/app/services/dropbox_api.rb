@@ -1,10 +1,10 @@
 # app/services/dropbox_api.rb
 
-require "net/http"
-require "uri"
-require "json"
-require "base64"
 require "active_support/time"
+require "base64"
+require "json"
+require "open3"
+require "uri"
 
 module DropboxApi
   DROPBOX_CLIENT_ID = ENV["DROPBOX_CLIENT_ID"]
@@ -48,9 +48,8 @@ module DropboxApi
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
     data = JSON.parse(response.body)
 
-    Rails.logger.info "🔐 Dropbox token_data: #{token_data.inspect}"
+    Rails.logger.debug "🔐 Dropbox token_data: #{token_data.inspect}"
     if data["access_token"]
-      Rails.logger.info "🔐 Dropbox access_token: #{data["access_token"].inspect}"
       dropbox_token_expires_at = data["expires_in"] ? Time.current + data["expires_in"].to_i.seconds : nil
       user.update!(
         dropbox_access_token: data["access_token"],
@@ -62,31 +61,88 @@ module DropboxApi
   end
 
   def self.get_account_info(access_token)
-    uri = URI.parse("https://api.dropboxapi.com/2/users/get_current_account")
+    curl_command = [
+      "curl",
+      "-s",  # silent mode (no progress)
+      "-X", "POST",
+      "https://api.dropboxapi.com/2/users/get_current_account",
+      "-H", "Authorization: Bearer #{access_token}"
+    ]
 
-    # Create a truly empty POST request (no body at all)
-    request = Net::HTTPGenericRequest.new(
-      'POST',   # method
-      true,     # request has request body
-      true,     # response has response body
-      uri.request_uri,
-      {
-        "Authorization" => "Bearer #{access_token}",
-        "Content-Type" => "application/json"
-      }
-    )
+    stdout, stderr, status = Open3.capture3(*curl_command)
 
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      http.request(request)
-    end
+    Rails.logger.info "📨 Dropbox response: #{status.exitstatus} - #{stdout}"
 
-    Rails.logger.info "📨 Dropbox response: #{response.inspect}"
-
-    if response.code.to_i == 200
-      JSON.parse(response.body)
+    if status.success?
+      JSON.parse(stdout)
     else
-      Rails.logger.error("❌ Dropbox get_account_info failed: #{response.code} - #{response.body}")
+      Rails.logger.error("❌ Dropbox get_account_info failed: #{stderr.presence || stdout}")
       raise "Failed to fetch Dropbox account info"
     end
   end
+
+  # def self.get_account_info(access_token)
+  #   url = URI.parse("https://api.dropboxapi.com/2/users/get_current_account")
+  #
+  #   # Prepare the HTTP request
+  #   request = Net::HTTP::Post.new(url)
+  #   request["Authorization"] = "Bearer #{access_token}"
+  #
+  #   request.delete('Content-Type')
+  #
+  #   # Do NOT set the Content-Type header, and send no body at all
+  #   request.body = nil  # Explicitly ensure there's no body
+  #
+  #   # Perform the HTTP request
+  #   response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
+  #     http.request(request)
+  #   end
+  #
+  #   Rails.logger.info "📨 Dropbox response: #{response.code} - #{response.body}"
+  #
+  #   if response.code.to_i == 200
+  #     JSON.parse(response.body)
+  #   else
+  #     Rails.logger.error("❌ Dropbox get_account_info failed: #{response.code} - #{response.body}")
+  #     raise "Failed to fetch Dropbox account info"
+  #   end
+  # end
+
+  # def self.get_account_info(access_token)
+  #   url = "https://api.dropboxapi.com/2/users/get_current_account"
+  #
+  #   response = HTTParty.post(url, headers: {
+  #     "Authorization" => "Bearer #{access_token}"
+  #   }, body: nil)
+  #
+  #   Rails.logger.info "📨 Dropbox response: #{response.code} - #{response.body}"
+  #
+  #   if response.code == 200
+  #     JSON.parse(response.body)
+  #   else
+  #     Rails.logger.error("❌ Dropbox get_account_info failed: #{response.code} - #{response.body}")
+  #     raise "Failed to fetch Dropbox account info"
+  #   end
+  # end
+
+  # def self.get_account_info(access_token)
+  #   uri = URI.parse("https://api.dropboxapi.com/2/users/get_current_account")
+  #   request = Net::HTTP::Post.new(uri)
+  #   request["Authorization"] = "Bearer #{access_token}"
+  #   request["Content-Type"] = "application/json"
+  #   request.body = "".to_json
+  #
+  #   response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+  #     http.request(request)
+  #   end
+  #
+  #   Rails.logger.info "📨 Dropbox response: #{response.inspect}"
+  #
+  #   if response.code.to_i == 200
+  #     JSON.parse(response.body)
+  #   else
+  #     Rails.logger.error("❌ Dropbox get_account_info failed: #{response.code} - #{response.body}")
+  #     raise "Failed to fetch Dropbox account info"
+  #   end
+  # end
 end

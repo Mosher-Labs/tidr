@@ -14,12 +14,12 @@ class OauthController < ApplicationController
       dropbox_token_expires_at: expires_at,
     )
 
-    # account_info = DropboxApi.get_account_info(access_token)
-    # email = account_info["email"]
-    #
-    # current_user.update!(
-    #   dropbox_email: email
-    # )
+    account_info = DropboxApi.get_account_info(access_token)
+    email = account_info["email"]
+
+    current_user.update!(
+      dropbox_email: email
+    )
 
     redirect_to root_path, notice: "Dropbox connected!"
   end
