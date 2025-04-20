@@ -100,9 +100,6 @@ GEM
     crass (1.0.6)
     csv (3.3.3)
     date (3.4.1)
-    debug (1.10.0)
-      irb (~> 1.10)
-      reline (>= 0.3.8)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -393,28 +390,26 @@ DEPENDENCIES
   bootsnap
   brakeman
   capybara
-  debug
-  devise (~> 4.9)
-  httparty (~> 0.23.1)
+  devise
+  httparty
   importmap-rails
   jbuilder
   kamal
-  pg (~> 1.5)
+  pg
   propshaft
-  puma (>= 5.0)
+  puma
   rails (~> 8.0.1)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable
   solid_cache
   solid_queue
-  sqlite3 (>= 2.1)
+  sqlite3
   stimulus-rails
-  tailwindcss-rails (~> 4.2)
-  tailwindcss-ruby (~> 4.0)
+  tailwindcss-rails
+  tailwindcss-ruby
   thruster
   turbo-rails
-  tzinfo-data
   web-console
 
 BUNDLED WITH
