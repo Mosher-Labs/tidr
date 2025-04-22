@@ -72,7 +72,7 @@ RUN groupadd --system --gid 1000 rails && \
 USER 1000:1000
 
 RUN echo "alias be='bundle exec'" > ~/.profile
-RUN echo "ll='ls -lah'" > ~/.profile
+RUN echo "alias ll='ls -lah'" > ~/.profile
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/tidr/bin/docker-entrypoint"]
