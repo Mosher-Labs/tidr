@@ -16,7 +16,7 @@ WORKDIR /tidr
 
 # Install base packages including libpq
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 libpq5 git && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libpq5 git && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 
@@ -51,9 +51,9 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-RUN ./bin/rails assets:precompile
-RUN ./bin/rails tailwindcss:build
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# RUN ./bin/rails assets:precompile
+# RUN ./bin/rails tailwindcss:build
 
 
 
