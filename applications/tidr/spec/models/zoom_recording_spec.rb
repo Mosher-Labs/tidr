@@ -1,34 +1,32 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe ZoomRecording, type: :model do
-  # TODO: Setup a user with random data, try ffactory
-  let(:user) { User.create(email: "test@example.com", password: "password123") }
-
-  # TODO: Setup a recording with random data, try ffactory
-  subject do
-    described_class.new(
-      user: user,
-      recording_id: "abc123"
-    )
-  end
-
-  describe "associations" do
+  describe 'associations' do
     it { is_expected.to belong_to(:user) }
   end
 
-  describe "validations" do
+  describe 'validations' do
+    subject { FactoryBot.create(:zoom_recording) }
+
     it { is_expected.to validate_uniqueness_of(:recording_id) }
-  end
 
-  it "is valid with valid attributes" do
-    expect(subject).to be_valid
-  end
+    it { is_expected.to validate_presence_of(:status) }
 
-  it "is invalid with a duplicate recording_id" do
-    described_class.create!(user: user, recording_id: "abc123")
-    duplicate = described_class.new(user: user, recording_id: "abc123")
+    it {
+      is_expected.to validate_inclusion_of(:status).
+        in_array(%w[pending processing uploaded failed])
+    }
 
-    expect(duplicate).not_to be_valid
-    expect(duplicate.errors[:recording_id]).to include("has already been taken")
+    it { is_expected.to validate_presence_of(:download_url) }
+
+    it 'validates format of download_url' do
+      should allow_value('https://zoom.us/recording.mp4').for(:download_url)
+      should_not allow_value('not-a-url').for(:download_url)
+    end
+
+    it 'allows optional fields to be blank' do
+      recording = build(:zoom_recording, topic: nil, start_time: nil, duration: nil)
+      expect(recording).to be_valid
+    end
   end
 end
