@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    command: bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}
+    command: bundle exec puma -C config/puma.rb
     depends_on:
       - db
       - cache
@@ -45,6 +45,19 @@ services:
     image: redis:latest
     ports:
       - "${CACHE_PORT:-6379}:${CACHE_PORT:-6379}"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --config /etc/cloudflared/config.yml run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
+    restart: unless-stopped
+    volumes:
+      - ./cloudflared.yml:/etc/cloudflared/config.yml
+      - ./ce53fe8b-e942-406e-aaf9-33c192731f60.json:/etc/cloudflared/ce53fe8b-e942-406e-aaf9-33c192731f60.json
+    depends_on:
+      - app
 
 volumes:
   db_data:

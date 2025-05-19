@@ -74,4 +74,6 @@ Rails.application.configure do
   config.hosts << "battlestation-ubuntu.local:3000"
   config.hosts << "af78-142-56-212-86.ngrok-free.app"
   config.hosts << "tidr.benniemosher.dev"
+
+  config.force_ssl = true
 end
