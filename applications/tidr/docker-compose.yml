@@ -46,13 +46,9 @@ services:
     ports:
       - "${CACHE_PORT:-6379}:${CACHE_PORT:-6379}"
 
-  tunnel:
+  cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflared
     command: tunnel --config /etc/cloudflared/config.yml run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
-    restart: unless-stopped
     volumes:
       - ./cloudflared.yml:/etc/cloudflared/config.yml
       - ./ce53fe8b-e942-406e-aaf9-33c192731f60.json:/etc/cloudflared/ce53fe8b-e942-406e-aaf9-33c192731f60.json
