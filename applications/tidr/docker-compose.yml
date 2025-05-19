@@ -11,12 +11,12 @@ services:
       CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
       DROPBOX_CLIENT_ID: ${DROPBOX_CLIENT_ID}
       DROPBOX_CLIENT_SECRET: ${DROPBOX_CLIENT_SECRET}
-      PORT: 3000
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      PORT: ${PORT:-3000}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_HOST: db
       RAILS_ENV: ${RAILS_ENV:-development}
-      REDIS_URL: redis://cache:6379/1
+      REDIS_URL: redis://cache:${CACHE_PORT:-6379}/1
       ZOOM_CLIENT_ID: ${ZOOM_CLIENT_ID}
       ZOOM_CLIENT_SECRET: ${ZOOM_CLIENT_SECRET}
       ZOOM_REDIRECT_URI: ${ZOOM_REDIRECT_URI}
@@ -32,19 +32,19 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_DB: tidr_${RAILS_ENV:-development}
       RAILS_ENV: ${RAILS_ENV:-development}
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:${DB_PORT:-5432}"
 
   cache:
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "${CACHE_PORT:-6379}:${CACHE_PORT:-6379}"
 
 volumes:
   db_data:

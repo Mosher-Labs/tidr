@@ -71,4 +71,7 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
   #
   config.hosts << "956f-142-56-212-86.ngrok-free.app"
+  config.hosts << "battlestation-ubuntu.local:3000"
+  config.hosts << "af78-142-56-212-86.ngrok-free.app"
+  config.hosts << "tidr.benniemosher.dev"
 end

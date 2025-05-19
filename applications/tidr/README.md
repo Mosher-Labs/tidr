@@ -15,3 +15,8 @@ To generate a new spec file, you can run something similiar to this:
 ```bash
 docker exec -e "RAILS_ENV=test" tidr-app-1 bundle exec rails g rspec:model user
 ```
+
+```bash
+docker-compose run --rm app bin/rails credentials:edit
+docker-compose run --rm app bin/rails db:migrate
+```
