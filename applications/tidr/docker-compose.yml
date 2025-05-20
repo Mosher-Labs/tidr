@@ -11,6 +11,7 @@ services:
       CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
       DROPBOX_CLIENT_ID: ${DROPBOX_CLIENT_ID}
       DROPBOX_CLIENT_SECRET: ${DROPBOX_CLIENT_SECRET}
+      DROPBOX_REDIRECT_URI: ${DROPBOX_REDIRECT_URI}
       PORT: ${PORT:-3000}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -51,7 +52,7 @@ services:
     command: tunnel --config /etc/cloudflared/config.yml run
     volumes:
       - ./cloudflared.yml:/etc/cloudflared/config.yml
-      - ./ce53fe8b-e942-406e-aaf9-33c192731f60.json:/etc/cloudflared/ce53fe8b-e942-406e-aaf9-33c192731f60.json
+      - ./a3e77d67-1ac6-40ba-ae1b-82a65d1377e0.json:/etc/cloudflared/a3e77d67-1ac6-40ba-ae1b-82a65d1377e0.json
     depends_on:
       - app
 

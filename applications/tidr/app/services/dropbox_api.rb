@@ -9,7 +9,7 @@ require "uri"
 module DropboxApi
   DROPBOX_CLIENT_ID = ENV["DROPBOX_CLIENT_ID"]
   DROPBOX_CLIENT_SECRET = ENV["DROPBOX_CLIENT_SECRET"]
-  REDIRECT_URI = ENV["DROPBOX_REDIRECT_URI"] || "http://localhost:3000/oauth/dropbox/callback"
+  REDIRECT_URI = ENV["DROPBOX_REDIRECT_URI"]
 
   DROPBOX_AUTH_URL = "https://www.dropbox.com/oauth2/authorize"
   DROPBOX_TOKEN_URL = "https://api.dropboxapi.com/oauth2/token"

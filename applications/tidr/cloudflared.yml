@@ -1,9 +1,7 @@
-tunnel: ce53fe8b-e942-406e-aaf9-33c192731f60
-credentials-file: /etc/cloudflared/ce53fe8b-e942-406e-aaf9-33c192731f60.json
+tunnel: a3e77d67-1ac6-40ba-ae1b-82a65d1377e0
+credentials-file: /etc/cloudflared/a3e77d67-1ac6-40ba-ae1b-82a65d1377e0.json
 
 ingress:
   - hostname: tidr.benniemosher.dev
-    service: https://app:3000
-    originRequest:
-      noTLSVerify: true
+    service: http://app:3000
   - service: http_status:404
