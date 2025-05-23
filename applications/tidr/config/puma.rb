@@ -44,3 +44,4 @@ pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
 #   cert: "/tidr/cert.pem",
 #   key:  "/tidr/privkey.pem",
 # }
+bind "tcp://0.0.0.0:#{ENV.fetch("PORT") { 3000 }}"

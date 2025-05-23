@@ -1,4 +1,3 @@
-# Make sure this file is required in rails_helper.rb
 require 'capybara/rspec'
 
 Capybara.server_host = '0.0.0.0'
@@ -15,7 +14,7 @@ Capybara.register_driver :selenium_remote_firefox do |app|
     app,
     browser: :remote,
     url: ENV.fetch('SELENIUM_REMOTE_URL', 'http://selenium:4444/wd/hub'),
-    capabilities: options
+    options: options
   )
 end
 
