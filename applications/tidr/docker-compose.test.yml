@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  test:
+    build: .
+    command: bundle exec rspec
+    depends_on:
+      - db
+      - cache
+      - selenium
+    environment:
+      CALENDLY_CLIENT_ID: ${CALENDLY_CLIENT_ID}
+      CALENDLY_CLIENT_SECRET: ${CALENDLY_CLIENT_SECRET}
+      CALENDLY_REDIRECT_URI: ${CALENDLY_REDIRECT_URI}
+      # DATABASE_URL: postgres://postgres:password@db:5432/myapp_test
+      DROPBOX_CLIENT_ID: ${DROPBOX_CLIENT_ID}
+      DROPBOX_CLIENT_SECRET: ${DROPBOX_CLIENT_SECRET}
+      DROPBOX_REDIRECT_URI: ${DROPBOX_REDIRECT_URI}
+      PORT: ${PORT:-3000}
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      RAILS_ENV: ${RAILS_ENV:-test}
+      REDIS_URL: redis://cache:${CACHE_PORT:-6379}/1
+      SELENIUM_REMOTE_URL: http://selenium:${SELENIUM_PORT:-4444}/wd/hub
+      ZOOM_CLIENT_ID: ${ZOOM_CLIENT_ID}
+      ZOOM_CLIENT_SECRET: ${ZOOM_CLIENT_SECRET}
+      ZOOM_REDIRECT_URI: ${ZOOM_REDIRECT_URI}
+      ZOOM_VERIFICATION_TOKEN: ${ZOOM_VERIFICATION_TOKEN}
+      ZOOM_WEBHOOK_SECRET_TOKEN: ${ZOOM_WEBHOOK_SECRET_TOKEN}
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    tty: true
+    volumes:
+      - .:/tidr
+    working_dir: /tidr
+
+  selenium:
+    image: selenium/standalone-firefox:latest
+    ports:
+      - "${SELENIUM_PORT:-4444}:${SELENIUM_PORT:-4444}"
+    shm_size: 2gb
