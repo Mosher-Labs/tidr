@@ -19,3 +19,4 @@ Capybara.register_driver :selenium_remote_firefox do |app|
 end
 
 Capybara.javascript_driver = :selenium_remote_firefox
+Capybara.default_driver = :selenium_remote_firefox
