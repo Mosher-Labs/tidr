@@ -36,7 +36,7 @@ services:
     working_dir: /tidr
 
   selenium:
-    image: selenium/standalone-firefox:latest
+    image: selenium/standalone-chrome:latest
     ports:
       - "${SELENIUM_PORT:-4444}:${SELENIUM_PORT:-4444}"
     shm_size: 2gb
