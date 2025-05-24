@@ -44,12 +44,14 @@ COPY ./privkey.pem .
 
 FROM base
 
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build "/${APP_NAME}" "/${APP_NAME}"
-
+# Create user/group first (this is fast)
 RUN groupadd --system --gid 1000 rails && \
-  useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-  chown -R rails:rails ./
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
+
+# Copy app code as rails user
+COPY --from=build --chown=rails:rails "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build --chown=rails:rails "/${APP_NAME}" "/${APP_NAME}"
+
 USER 1000:1000
 
 RUN echo "alias be='bundle exec'; alias ll='ls -lah';" > ~/.profile
