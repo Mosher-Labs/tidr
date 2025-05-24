@@ -2,15 +2,15 @@
 #   As a registered user
 #   I want to sign in and access my dashboard
 #
-#   Scenario: Visiting the site while logged out
+#   Scenario: Visiting the site while signed out
 #     Given a registered user exists
-#     And I am logged out
+#     And I am signed out
 #     When I visit the home page
 #     Then I should see the sign in page
 #
 #   Scenario: Signing in with valid credentials
 #     Given a registered user exists
-#     And I am logged out
+#     And I am signed out
 #     When I visit the sign in page
 #     And I fill in my username and password
 #     And I click "Sign In"
@@ -20,7 +20,7 @@
 require 'rails_helper'
 
 RSpec.describe 'User authentication', type: :system do
-  let(:password) { 'password123' }
+  let(:password) { Faker::Internet.unique.password(min_length: 12) }
   let(:user) { create(:user, password: password) }
 
   before do

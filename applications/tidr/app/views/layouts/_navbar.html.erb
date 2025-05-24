@@ -22,13 +22,13 @@
       <% if not [users_path, root_path].include? request.path %>
         <%= link_to "Dashboard", users_path, class: "button" %>
       <% end %>
-      <%= button_to "Logout",
+      <%= button_to "Sign Out",
       destroy_user_session_path,
       method: :delete,
       class: "button button-destruct" %>
     <% elsif not [new_user_password_path, new_user_session_path, new_user_registration_path].include? request.path %>
       <%= link_to "Sign up", new_user_registration_path, class: "button button-confirm" %>
-      <%= link_to "Login", new_user_session_path, class: "button" %>
+      <%= link_to "Sign In", new_user_session_path, class: "button" %>
     <% end %>
   </div>
 </nav>
