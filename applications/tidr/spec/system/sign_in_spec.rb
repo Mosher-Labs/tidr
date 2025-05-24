@@ -15,6 +15,17 @@
 #     And I fill in my username and password
 #     And I click "Sign In"
 #     Then I should see the dashboard
+#
+#   Scenario: Signing in with 'Remember me' checked
+#     Given I am a registered user
+#     And I am logged out
+#     When I visit the sign in page
+#     And I fill in my email and password
+#     And I check "Remember me"
+#     And I click "Sign In"
+#     Then I should see the dashboard
+#     Then I should still be signed in
+#     When I close my browser and reopen the site
 
 
 require 'rails_helper'
@@ -41,6 +52,30 @@ RSpec.describe 'User authentication', type: :system do
       fill_in 'Email', with: user.email
       fill_in 'Password', with: password
       click_button 'Sign In'
+      expect(page).to have_content('Dashboard')
+    end
+
+    it "remembers the user after closing and reopening the browser" do
+      visit new_user_session_path
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: password
+      check 'Remember me'
+      click_button 'Sign In'
+      expect(page).to have_content('Dashboard')
+
+      # Save the remember_me cookie value
+      cookie = page.driver.browser.manage.cookie_named('remember_user_token')
+
+      # Simulate closing the browser (clears all cookies)
+      Capybara.reset_sessions!
+      visit root_path
+
+      # Restore the remember_me cookie
+      if cookie
+        page.driver.browser.manage.add_cookie(cookie)
+        visit root_path
+      end
+
       expect(page).to have_content('Dashboard')
     end
   end
