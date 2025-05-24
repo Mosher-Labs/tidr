@@ -16,7 +16,7 @@ ENV RAILS_ENV="production" \
 WORKDIR "/${APP_NAME}"
 
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libpq5 git && \
+  apt-get install --no-install-recommends -y curl libjemalloc2 libvips libpq5 git netcat-openbsd && \
   rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 FROM base AS build

@@ -56,5 +56,11 @@ services:
     depends_on:
       - app
 
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "${SELENIUM_PORT:-4444}:${SELENIUM_PORT:-4444}"
+    shm_size: 2gb
+
 volumes:
   db_data:

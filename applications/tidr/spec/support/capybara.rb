@@ -1,8 +1,8 @@
 require 'capybara/rspec'
 
 Capybara.server_host = '0.0.0.0'
-Capybara.server_port = 3001 + ENV['TEST_ENV_NUMBER'].to_i
-Capybara.app_host = "http://test:3000"
+Capybara.server_port = ENV['PORT'].to_i + ENV['TEST_ENV_NUMBER'].to_i
+Capybara.app_host = "http://test:" + ENV['PORT']
 
 Capybara.register_driver :selenium_remote_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
