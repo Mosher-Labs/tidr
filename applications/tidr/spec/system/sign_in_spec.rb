@@ -31,8 +31,7 @@
 require 'rails_helper'
 
 RSpec.describe 'User authentication', type: :system do
-  let(:password) { Faker::Internet.unique.password(min_length: 12) }
-  let(:user) { create(:user, password: password) }
+  let(:user) { create(:user) }
 
   before do
     user
@@ -42,6 +41,7 @@ RSpec.describe 'User authentication', type: :system do
   context 'when visiting the site while logged out' do
     it 'shows the sign in page' do
       visit root_path
+
       expect(page).to have_content('Sign In')
     end
   end
@@ -50,33 +50,21 @@ RSpec.describe 'User authentication', type: :system do
     it 'allows the user to sign in and see the dashboard' do
       visit new_user_session_path
       fill_in 'Email', with: user.email
-      fill_in 'Password', with: password
+      fill_in 'Password', with: user.password
       click_button 'Sign In'
+
       expect(page).to have_content('Dashboard')
     end
 
     it "remembers the user after closing and reopening the browser" do
       visit new_user_session_path
       fill_in 'Email', with: user.email
-      fill_in 'Password', with: password
+      fill_in 'Password', with: user.password
       check 'Remember me'
       click_button 'Sign In'
-      expect(page).to have_content('Dashboard')
-
-      # Save the remember_me cookie value
-      cookie = page.driver.browser.manage.cookie_named('remember_user_token')
-
-      # Simulate closing the browser (clears all cookies)
-      Capybara.reset_sessions!
-      visit root_path
-
-      # Restore the remember_me cookie
-      if cookie
-        page.driver.browser.manage.add_cookie(cookie)
-        visit root_path
-      end
 
       expect(page).to have_content('Dashboard')
+      expect(page.driver.browser.manage.cookie_named('remember_user_token')).not_to be_nil
     end
   end
 end

@@ -13,13 +13,12 @@
 require 'rails_helper'
 
 RSpec.describe 'User Sign out', type: :system do
-  let(:password) { Faker::Internet.unique.password(min_length: 12) }
-  let(:user) { create(:user, password: password) }
+  let(:user) { create(:user) }
 
   before do
     visit new_user_session_path
     fill_in 'Email', with: user.email
-    fill_in 'Password', with: password
+    fill_in 'Password', with: user.password
     click_button 'Sign In'
     expect(page).to have_content('Dashboard')
   end
@@ -27,6 +26,6 @@ RSpec.describe 'User Sign out', type: :system do
   it 'signs the user out and shows the sign in page' do
     click_button 'Sign Out'
     expect(page).to have_content('Sign In')
-    expect(page).not_to have_content('Dashboard') # Adjust as needed
+    expect(page).not_to have_content('Dashboard')
   end
 end
