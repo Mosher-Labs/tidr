@@ -10,8 +10,8 @@ module DropboxApi
   DROPBOX_CLIENT_ID = ENV["DROPBOX_CLIENT_ID"]
   DROPBOX_CLIENT_SECRET = ENV["DROPBOX_CLIENT_SECRET"]
   REDIRECT_URI = ENV["DROPBOX_REDIRECT_URI"]
-
   DROPBOX_AUTH_URL = "https://www.dropbox.com/oauth2/authorize"
+
   DROPBOX_TOKEN_URL = "https://api.dropboxapi.com/oauth2/token"
 
   def self.authorization_url
@@ -60,23 +60,40 @@ module DropboxApi
     end
   end
 
+  # def self.get_account_info(access_token)
+  #   curl_command = [
+  #     "curl",
+  #     "-s",  # silent mode (no progress)
+  #     "-X", "POST",
+  #     "https://api.dropboxapi.com/2/users/get_current_account",
+  #     "-H", "Authorization: Bearer #{access_token}"
+  #   ]
+  #
+  #   stdout, stderr, status = Open3.capture3(*curl_command)
+  #
+  #   Rails.logger.info "📨 Dropbox response: #{status.exitstatus} - #{stdout}"
+  #
+  #   if status.success?
+  #     JSON.parse(stdout)
+  #   else
+  #     Rails.logger.error("❌ Dropbox get_account_info failed: #{stderr.presence || stdout}")
+  #     raise "Failed to fetch Dropbox account info"
+  #   end
+  # end
   def self.get_account_info(access_token)
-    curl_command = [
-      "curl",
-      "-s",  # silent mode (no progress)
-      "-X", "POST",
-      "https://api.dropboxapi.com/2/users/get_current_account",
-      "-H", "Authorization: Bearer #{access_token}"
-    ]
+    uri = URI.parse("https://api.dropboxapi.com/2/users/get_current_account")
+    request = Net::HTTP::Post.new(uri)
+    request["Authorization"] = "Bearer #{access_token}"
+    request.delete('Content-Type')
+    request.body = nil
 
-    stdout, stderr, status = Open3.capture3(*curl_command)
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      http.request(request)
+    end
 
-    Rails.logger.info "📨 Dropbox response: #{status.exitstatus} - #{stdout}"
-
-    if status.success?
-      JSON.parse(stdout)
+    if response.code.to_i == 200
+      JSON.parse(response.body)
     else
-      Rails.logger.error("❌ Dropbox get_account_info failed: #{stderr.presence || stdout}")
       raise "Failed to fetch Dropbox account info"
     end
   end

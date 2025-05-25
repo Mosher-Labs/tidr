@@ -21,6 +21,6 @@ class OauthController < ApplicationController
       dropbox_email: email
     )
 
-    redirect_to root_path, notice: "Dropbox connected!"
+    redirect_to root_path, notice: "You are connected to Dropbox as #{email}"
   end
 end

@@ -7,6 +7,13 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'webmock/rspec'
+
+# Allow connections to your Selenium host AND localhost
+WebMock.disable_net_connect!(allow: ['selenium', 'localhost', '0.0.0.0', '127.0.0.1'])
+
+require 'warden/test/helpers'
+include Warden::Test::Helpers
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -25,6 +32,9 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   config.include FactoryBot::Syntax::Methods
+
+  config.include Warden::Test::Helpers
+  config.after(:each, type: :system) { Warden.test_reset! }
 end
 
 Shoulda::Matchers.configure do |config|
